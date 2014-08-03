@@ -21,14 +21,14 @@
 #include <iostream>
 #include <stdlib.h>
 
-template <typename T> class array;
+template <typename T> class Array;
 
-template <typename T> std::ostream & operator<<(std::ostream &os, const array<T> &a);
+template <typename T> std::ostream & operator<<(std::ostream &os, const Array<T> &a);
 
 
-template <typename T> class array{
+template <typename T> class Array{
 
-	//friend std::ostream& operator<<(std::ostream &, const array<T> &);
+	//friend std::ostream& operator<<(std::ostream &, const Array<T> &);
 	private:
 		//no. of elements
 		size_t sz;
@@ -53,6 +53,8 @@ template <typename T> class array{
 		
 		void check_index(size_t i) const {
 			if( i >= sz || i < 0){
+				//delete pointer
+				delete [] ptr;
 				std::cerr<< "index is " << i <<std::endl;
 				std::cerr<<"index out of bounds error..." << "\nprogram exits......" <<std::endl;
 				exit(1);
@@ -62,10 +64,10 @@ template <typename T> class array{
 	public:
 		//default constructor
 		//initialize size to 0 ,capacity to 1
-		array(): sz(0), cap(1), ptr(new T[1]){ }
+		Array(): sz(0), cap(1), ptr(new T[1]){ }
 		
-		//construct an array contain size of T
-		array(int size, const T &t) {
+		//construct an Array contain size of T
+		Array(size_t size, const T &t) {
 			sz = size;
 			cap = get_least_power_2(size);
 			ptr = new T[cap];
@@ -74,13 +76,13 @@ template <typename T> class array{
 			}
 		}
 		
-		~array(){
+		~Array(){
 			delete []ptr;
 		}
 
 		//copy constructor
 		//deep copy constructor
-		array(const array &from){
+		Array(const Array &from){
 			sz = from.sz;
 			cap = get_least_power_2(sz);
 			ptr = new T[cap];
@@ -96,7 +98,7 @@ template <typename T> class array{
 
 		//assignment operator
 		//deep copy assignment
-		array& operator=( const array &that){
+		Array& operator=( const Array &that){
 			//check self assignment
 			if (this != &that){
 				delete []ptr;
@@ -116,7 +118,7 @@ template <typename T> class array{
 		}
 		
 
-		//push t to the end of array
+		//push t to the end of Array
 		//if there is no room reallocate enough memory
 		void push_back(const T &t){
 			//no capacity to push 
@@ -124,6 +126,7 @@ template <typename T> class array{
 			if(sz == cap){
 				T *new_ptr = new T[2*cap];
 #ifdef MEMCOPY
+				//bug prone
 				memcpy(new_ptr, ptr, sizeof(T) * sz);
 #else
 				for(unsigned i=0; i<sz;++i){
@@ -139,7 +142,7 @@ template <typename T> class array{
 			}
 		}
 		
-		//erase the last element of array
+		//erase the last element of Array
 		T pop_back(){
 			T t = *(ptr+sz-1);
 			this->erase(sz-1);
@@ -213,7 +216,7 @@ template <typename T> class array{
 			--sz;
 		}
 
-		//clear the element of array
+		//clear the element of Array
 		//
 		void clear(){
 			delete [] ptr;
@@ -222,12 +225,12 @@ template <typename T> class array{
 			cap = 1;
 		}
 
-		//return the size of array
+		//return the size of Array
 		size_t size()const{
 			return sz;
 		}
 		
-		//return the capacity of array
+		//return the capacity of Array
 		size_t capacity()const{
 			return cap;
 		}
@@ -237,7 +240,7 @@ template <typename T> class array{
 		}
 };
 
-template <class T> std::ostream & operator<<(std::ostream &os, const array<T> &a){
+template <class T> std::ostream & operator<<(std::ostream &os, const Array<T> &a){
 	os << "{";
 	for(unsigned  i=0; i<a.size()-1; ++i){
 		os << a[i] << ", ";
