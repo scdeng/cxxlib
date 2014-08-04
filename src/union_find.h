@@ -18,20 +18,27 @@
 
 #ifndef UNION_FIND_H
 #define UNION_FIND_H
-
+#define DEBUG_PRINTING
+#ifdef DEBUG_PRINTING
+#include <iostream>
+using namespace std;
+#endif
 class UF{
-
+#ifdef DEBUG_PRINTING
+	friend bool check_UF(const UF&);
+#endif
 	private:
 		//parent[i] is parent of i
 		Array<int> parent;
 		//sz[i] is number of subtree rooted at i
-		Arran<int> sz;
+		Array<int> sz;
 		//no. of componets
 		int count;
 
 		//find root of u
 		int find(int u){
 			while( u != parent[u]){
+				parent[u] = parent[parent[u]];
 				u = parent[u];
 			}
 			return u;
@@ -45,6 +52,10 @@ class UF{
 			for(int i=0; i<N; ++i){
 				parent[i] = i;
 			}
+#ifdef DEBUG_PRINTING
+			cout <<"constructing \n" <<  sz;
+			cout <<"constructing \n" << parent;
+#endif
 		}
 
 		bool isConnected(int u, int v){
@@ -55,7 +66,9 @@ class UF{
 			int rootU = find(u);
 			//find root of v
 			int rootV = find(v);
-			
+			if(rootV == rootU){
+				return;
+			}
 			//connect smaller one to bigger one
 			if (sz[rootU] > sz[rootV]){
 				parent[rootV] = rootU;
@@ -71,5 +84,13 @@ class UF{
 		size_t size();
 
 };
-
+#ifdef DEBUG_PRINTING
+bool check_UF( const UF &uf){
+	cout <<"id array is " << endl;
+	cout << uf.parent;
+	cout <<"size array is " <<endl;
+	cout << uf.sz;
+	return true;
+}
+#endif
 #endif
