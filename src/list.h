@@ -83,7 +83,7 @@ template <typename T>  class List{
 			}
 
 			//dereference returning an object 
-			U operator*() const {
+			U& operator*() const {
 				return cur->data;
 			}
 			
@@ -462,6 +462,12 @@ template <typename T>  class List{
 	//end iterator
 	iterator end(){
 		return Iterator<T>(tail);
+	}
+	
+	void swap(iterator one, iterator another){
+		T t = *one;
+		*one = *another;
+		*another = t;
 	}
 
 	//return size of list

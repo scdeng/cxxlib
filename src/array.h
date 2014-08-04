@@ -349,6 +349,12 @@ template <typename T> class Array{
 //		void insert(iterator pos, InputIterator beg, InputIterator end){
 //			
 //		}
+		
+		void swap(iterator one, iterator another){
+			T t = *one;
+			*one = *another;
+			*another = t;
+		}
 
 		//return the size of Array
 		size_t size()const{
