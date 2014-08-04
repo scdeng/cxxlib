@@ -1,0 +1,52 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  array.cpp
+ *
+ *    Description:  array 
+ *
+ *        Version:  1.0
+ *        Created:  08/02/2014 11:11:30 AM
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  Deng Yong (dy), scdeng@163.com
+ *        Company:  IIE,CAS
+ *
+ * =====================================================================================
+ */
+
+#include "array.h"
+
+//template <class T> 
+//inline T& array<T>::operator[] (size_t i){
+//	if( i < 0 || i >= sz){
+//		std::cerr<<"index out of bounds error" << "program exits" <<std::endl;
+//		exit(1);
+//	}
+//	return *(ptr+i);
+//}
+//
+
+template <typename T>
+std::ostream& operator<<(std::ostream &os, const array<T> &a){
+	os << "[" ;
+	for(unsigned i=0; i<a.size()-1; ++i){
+		os << a[i] << ",";
+	}
+	if((a.size() - 1 >=0) ){
+		os << a[a.size()-1];
+	}
+	os << "]" << std::endl;
+	return os;
+}
+
+template<class T>
+T& array<T>::operator[](size_t i)
+{
+	if( i < 0 || i >= sz){
+		std::cerr<<"index out of bounds error" << "program exit" <<std::endl;
+		exit(1);
+	}
+	return *(ptr+i);
+}

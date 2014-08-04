@@ -1,0 +1,72 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ARRAY_H	array.h	20;"	d
+Array	array.h	/^		Array(): sz(0), cap(1), ptr(new T[1]){ }$/;"	f	class:Array
+Array	array.h	/^		Array(const Array &from){$/;"	f	class:Array
+Array	array.h	/^		Array(size_t size, const T &t) {$/;"	f	class:Array
+Array	array.h	/^template <typename T> class Array{$/;"	c
+CC	Makefile	/^CC=g++$/;"	m
+CXXFLAGS	Makefile	/^CXXFLAGS = -Wall -g $/;"	m
+ITERATOR_H	iterator.h	20;"	d
+Iterator	list.h	/^			Iterator(const Iterator &from){$/;"	f	class:List::Iterator
+Iterator	list.h	/^			Iterator(const ListNode<T> *node){$/;"	f	class:List::Iterator
+Iterator	list.h	/^	template <typename T> class Iterator{$/;"	c	class:List
+LIST_H	list.h	20;"	d
+List	list.h	/^	List( const List &from){$/;"	f	class:List
+List	list.h	/^	List(){$/;"	f	class:List
+List	list.h	/^template <typename T>  class List{$/;"	c
+ListNode	list.h	/^	ListNode(const T &t):data(t),prev(NULL),next(NULL){}$/;"	f	struct:ListNode
+ListNode	list.h	/^template <typename T> struct ListNode{$/;"	s
+NON_ITERATOR	list.h	23;"	d
+OBJS	Makefile	/^OBJS = $(patsubst %.cpp, %.o,$(SOUCE_FILES))$/;"	m
+PRG	Makefile	/^PRG=jet$/;"	m
+SOUCE_FILES	Makefile	/^SOUCE_FILES = $(wildcard *.cpp)$/;"	m
+back	list.h	/^	T back()const {$/;"	f	class:List
+cap	array.h	/^		size_t cap;$/;"	m	class:Array
+capacity	array.h	/^		size_t capacity()const{$/;"	f	class:Array
+check_index	array.h	/^		void check_index(size_t i) const {$/;"	f	class:Array
+clear	array.h	/^		void clear(){$/;"	f	class:Array
+clear	list.h	/^	void clear(){$/;"	f	class:List
+copy_list	list.h	/^	void copy_list(const List &from){$/;"	f	class:List
+cur	list.h	/^			ListNode<T> *cur;$/;"	m	class:List::Iterator
+data	list.h	/^	T data;$/;"	m	struct:ListNode
+destroy	list.h	/^	void destroy(){$/;"	f	class:List
+empty	array.h	/^		bool empty() const {$/;"	f	class:Array
+empty	list.h	/^	bool empty() const { return sz == 0; }$/;"	f	class:List
+erase	array.h	/^		void erase(size_t idx){$/;"	f	class:Array
+front	list.h	/^	T front() const {$/;"	f	class:List
+get_head	list.h	/^	ListNode<T> * get_head(){$/;"	f	class:List
+get_least_power_2	array.h	/^		size_t get_least_power_2(size_t n){$/;"	f	class:Array
+get_tail	list.h	/^	ListNode<T> * get_tail(){$/;"	f	class:List
+head	list.h	/^	ListNode<T> *head;$/;"	m	class:List
+insert	array.h	/^		void insert(size_t idx, const T &t){$/;"	f	class:Array
+main	main.cpp	/^int main(){$/;"	f
+next	list.h	/^	ListNode<T> *next;$/;"	m	struct:ListNode
+operator <<	array.h	/^template <class T> std::ostream & operator<<(std::ostream &os, const Array<T> &a){$/;"	f
+operator <<	list.h	/^template <class U> std::ostream& operator<<(std::ostream &os, const List<U> &list){$/;"	f
+operator =	array.h	/^		Array& operator=( const Array &that){$/;"	f	class:Array
+operator =	list.h	/^			Iterator& operator=(const Iterator &that){$/;"	f	class:List::Iterator
+operator =	list.h	/^	List& operator=(const List &that){$/;"	f	class:List
+operator []	array.h	/^		T& operator[](size_t i)$/;"	f	class:Array
+operator []	array.h	/^		const T& operator[](size_t i)const $/;"	f	class:Array
+pop_back	array.h	/^		T pop_back(){$/;"	f	class:Array
+pop_back	list.h	/^	bool pop_back(){$/;"	f	class:List
+pop_front	list.h	/^	bool pop_front(){$/;"	f	class:List
+prev	list.h	/^	ListNode<T> *prev;$/;"	m	struct:ListNode
+ptr	array.h	/^		T * ptr;$/;"	m	class:Array
+push_back	array.h	/^		void push_back(const T &t){$/;"	f	class:Array
+push_back	list.h	/^	void push_back( const T &t){$/;"	f	class:List
+push_front	list.h	/^	void push_front(const T &t){$/;"	f	class:List
+size	array.h	/^		size_t size()const{$/;"	f	class:Array
+size	list.h	/^	size_t size() const {return sz;}$/;"	f	class:List
+sz	array.h	/^		size_t sz;$/;"	m	class:Array
+sz	list.h	/^	size_t sz;$/;"	m	class:List
+tail	list.h	/^	ListNode<T> *tail;$/;"	m	class:List
+test_array	main.cpp	/^void test_array(){$/;"	f
+test_list	main.cpp	/^void test_list(){$/;"	f
+test_list_iter	main.cpp	/^void test_list_iter(){$/;"	f
+~Array	array.h	/^		~Array(){$/;"	f	class:Array
