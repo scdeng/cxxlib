@@ -70,9 +70,6 @@ class UF{
 		}
 		size_t size();
 
-}
-
-
-
+};
 
 #endif
