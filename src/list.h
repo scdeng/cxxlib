@@ -30,6 +30,110 @@ template <typename T> struct ListNode{
 	ListNode(const T &t):data(t),prev(NULL),next(NULL){}
 };
 
+//iterator class of List
+template <typename U> class Iterator__Linked{
+	template <typename TYPE> friend class List;
+	private:
+	ListNode<U> *cur;
+	public:
+
+	//default constructor
+	//dereference this iterator occurs an error
+	Iterator__Linked(): cur(NULL) { }
+
+	//construct Iterator__Linked at node
+	Iterator__Linked(ListNode<U> *node){
+		cur = node;
+	}
+
+	//copy constructor
+	Iterator__Linked(const Iterator__Linked &from){
+		cur = from.cur;
+	}
+
+	//copy assignment
+	Iterator__Linked& operator=(const Iterator__Linked &that){
+		this->cur = that.cur;
+		return *this;
+	}
+
+	//compare 
+	bool operator!=(const Iterator__Linked &that) const {
+		return cur != that.cur;
+	}
+
+	bool operator==(const Iterator__Linked &that) const {
+		return cur == that.cur;
+	}
+
+	//dereference returning an object 
+	U& operator*() const {
+		return cur->data;
+	}
+
+	//I don't know what happens
+	//Just write like stl
+	U * operator->() const {
+		return (U*) cur->data;
+	}
+
+	//prefix ++operator
+	Iterator__Linked& operator++(){
+		cur = cur->next;
+		return *this;
+	}
+	//suffix ++operator
+	Iterator__Linked operator++(int){
+		Iterator__Linked tmp(*this);
+		cur = cur->next;
+		return tmp;
+	}
+
+	//prefix -- operator
+	Iterator__Linked& operator--(){
+		cur = cur->prev;
+		return *this;
+	}
+	//suffix -- operator
+	Iterator__Linked operator--(int){
+		Iterator__Linked tmp(*this);
+		cur = cur->prev;
+		return tmp;
+	}
+
+	//			//move n items
+	//			//n can be any integer
+	//			//move forward when n is positive
+	//			//move backward when n i negative
+	//			//no move when n is 0
+	//			Iterator__Linked& advance(int n){
+	//				//move forward
+	//				if (n > 0){
+	//					while( cur->next && n-- > 0){
+	//						cur = cur->next;
+	//					}
+	//					
+	//				}else if( n < 0 ){
+	//				//move backward
+	//
+	//				}else{
+	//				//no move
+	//				}
+	//			}
+
+	U& next(){	
+		cur = cur->next;
+		return cur->prev->data;
+	}
+
+	//java style iterator
+	//
+	bool hasNext()const{
+		return cur->next != NULL;
+	}
+};
+
+
 
 /*
  *	template class List
@@ -44,112 +148,9 @@ template <typename T>  class List{
 #endif
 
 	template <class U> friend std::ostream& operator<<(std::ostream&, const List<U>&);
-	//template <class Tp> friend class Iterator;
+	//template <class Tp> friend class Iterator__Linked;
 
-	//iterator class of List
-	template <typename U> class Iterator{
-		template <typename TYPE> friend class List;
-		private:
-			ListNode<U> *cur;
-		public:
-
-			//default constructor
-			//dereference this iterator occurs an error
-			Iterator(): cur(NULL) { }
-
-			//construct Iterator at node
-			Iterator(ListNode<U> *node){
-				cur = node;
-			}
-
-			//copy constructor
-			Iterator(const Iterator &from){
-				cur = from.cur;
-			}
-
-			//copy assignment
-			Iterator& operator=(const Iterator &that){
-				this->cur = that.cur;
-				return *this;
-			}
-			
-			//compare 
-			bool operator!=(const Iterator &that) const {
-				return cur != that.cur;
-			}
-
-			bool operator==(const Iterator &that) const {
-				return cur == that.cur;
-			}
-
-			//dereference returning an object 
-			U& operator*() const {
-				return cur->data;
-			}
-			
-			//I don't know what happens
-			//Just write like stl
-			U * operator->() const {
-				return (U*) cur->data;
-			}
-			
-			//prefix ++operator
-			Iterator& operator++(){
-				cur = cur->next;
-				return *this;
-			}
-			//suffix ++operator
-			Iterator operator++(int){
-				Iterator tmp(*this);
-				cur = cur->next;
-				return tmp;
-			}
-			
-			//prefix -- operator
-			Iterator& operator--(){
-				cur = cur->prev;
-				return *this;
-			}
-			//suffix -- operator
-			Iterator operator--(int){
-				Iterator tmp(*this);
-				cur = cur->prev;
-				return tmp;
-			}
-			
-//			//move n items
-//			//n can be any integer
-//			//move forward when n is positive
-//			//move backward when n i negative
-//			//no move when n is 0
-//			Iterator& advance(int n){
-//				//move forward
-//				if (n > 0){
-//					while( cur->next && n-- > 0){
-//						cur = cur->next;
-//					}
-//					
-//				}else if( n < 0 ){
-//				//move backward
-//
-//				}else{
-//				//no move
-//				}
-//			}
-
-			U& next(){	
-				cur = cur->next;
-				return cur->prev->data;
-			}
-
-			//java style iterator
-			//
-			bool hasNext()const{
-				return cur->next != NULL;
-			}
-	};
-
-
+	
 
 
 
@@ -234,8 +235,12 @@ template <typename T>  class List{
 		return true;
 	}
 
+
+
+
 	public:
-	typedef Iterator<T> iterator;
+	
+	typedef Iterator__Linked<T> iterator;
 
 	List(){
 		head = new ListNode<T>(T());
@@ -349,6 +354,35 @@ template <typename T>  class List{
 		--sz;
 		return true;
 	}
+	
+	//return a reference of first element
+	T& front(){
+		//if list is empty
+		//Oh, no why are you doing so?
+		if(empty()){
+			std::cerr << "calling front() on an empty object..." <<std::endl;
+			std::cerr << "data returned is not defined..." << std::endl;
+			return head->data;
+		}else{
+			//return head's data
+			return head->next->data;
+		}
+
+	}
+	//return a reference of last element
+	T& back(){
+		//if list is empty
+		//Oh, no!!!
+		if(empty()){
+			std::cerr << "calling back() on an empty list..." <<std::endl;
+			std::cerr << "data returned is not defined..." << std::endl;
+			return head->data;
+		}else{
+			//return head's data
+			return tail->prev->data;
+		}
+	}
+
 
 	//return the first element
 	//calling the on an empty list will cause undefined behavior
@@ -356,7 +390,7 @@ template <typename T>  class List{
 		//if list is empty
 		//Oh, no why are you doing so?
 		if(empty()){
-			std::cerr << "calling front() on an empty list..." <<std::endl;
+			std::cerr << "calling front() on an empty object..." <<std::endl;
 			std::cerr << "data returned is not defined..." << std::endl;
 			return T();
 		}else{
@@ -364,6 +398,9 @@ template <typename T>  class List{
 			return head->next->data;
 		}
 	}
+
+
+
 
 	//return the last element
 	//calling the function on empty list will cause undefined behavior
@@ -405,6 +442,7 @@ template <typename T>  class List{
 		}
 	}
 	
+	//insert n t's before pos
 	void insert(iterator pos, int n, const T &t){
 		//get cur
 		ListNode<T> *p = pos.cur;
@@ -456,12 +494,12 @@ template <typename T>  class List{
 
 	//first element
 	iterator begin(){
-		return Iterator<T>(head->next);
+		return Iterator__Linked<T>(head->next);
 	}
 		
 	//end iterator
 	iterator end(){
-		return Iterator<T>(tail);
+		return Iterator__Linked<T>(tail);
 	}
 	
 	void swap(iterator one, iterator another){

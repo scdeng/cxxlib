@@ -22,97 +22,93 @@
 #include <stdlib.h>
 
 template <typename T> class Array;
-
 template <typename T> std::ostream & operator<<(std::ostream &os, const Array<T> &a);
+
+//=============================================
+//iterator class of List
+template <typename U> class Iterator__Seq{
+	template <typename TYPE> friend class Array;
+	
+	private:
+		U *ptr;
+		unsigned offset;
+	public:
+
+	//default constructor
+	//dereference this iterator occurs an error
+	Iterator__Seq(): ptr(NULL), offset(0) { }
+
+	//construct Iterator__Seq at node
+	Iterator__Seq(U *_ptr, int _offset) : ptr(_ptr), offset(_offset) {}
+
+	//copy constructor
+	Iterator__Seq(const Iterator__Seq &from){
+		ptr = from.ptr;
+		offset = from.offset;
+	}
+
+	//copy assignment
+	Iterator__Seq& operator=(const Iterator__Seq &that){
+		ptr = that.ptr;
+		offset = that.offset;
+		return *this;
+	}
+
+	//compare 
+	bool operator!=(const Iterator__Seq &that) const {
+
+		return ( ptr != that.ptr  || offset != that.offset  );
+	}
+
+	bool operator==(const Iterator__Seq &that) const {
+		return ( ptr == that.ptr  && offset == that.offset );
+	}
+
+	//dereference returning an object 
+	U& operator*() const {
+		return *(ptr + offset);
+	}
+
+	//I don't know what happens
+	//Just write like stl
+	U * operator->() const {
+		return ptr+offset;
+	}
+
+	//prefix ++operator
+	Iterator__Seq& operator++(){
+		++offset;
+		return *this;
+	}
+	//suffix ++operator
+	Iterator__Seq operator++(int){
+		Iterator__Seq __tmp(*this);
+		++offset;
+		return __tmp;
+	}
+
+	//prefix -- operator
+	Iterator__Seq& operator--(){
+		--offset;
+		return *this;
+	}
+	//suffix -- operator
+	Iterator__Seq operator--(int){
+		Iterator__Seq __tmp(*this);
+		--offset;
+		return __tmp;
+	}
+
+	//operator +
+	Iterator__Seq& operator+(int n){
+		offset + n;
+		return *this;
+	}
+};
+//==========================================================
 
 
 template <typename T> class Array{
-
-
-	//=============================================
-	//iterator class of List
-	template <typename U> class Iterator{
-		template <typename TYPE> friend class Array;
-		private:
-			U *ptr;
-			unsigned offset;
-		public:
-
-			//default constructor
-			//dereference this iterator occurs an error
-			Iterator(): ptr(NULL), offset(0) { }
-
-			//construct Iterator at node
-			Iterator(U *_ptr, int _offset) : ptr(_ptr), offset(_offset) {}
-
-			//copy constructor
-			Iterator(const Iterator &from){
-				ptr = from.ptr;
-				offset = from.offset;
-			}
-
-			//copy assignment
-			Iterator& operator=(const Iterator &that){
-				ptr = that.ptr;
-				offset = that.offset;
-				return *this;
-			}
-			
-			//compare 
-			bool operator!=(const Iterator &that) const {
-
-				return ( ptr != that.ptr  || offset != that.offset  );
-			}
-
-			bool operator==(const Iterator &that) const {
-				return ( ptr == that.ptr  && offset == that.offset );
-			}
-
-			//dereference returning an object 
-			U& operator*() const {
-				return *(ptr + offset);
-			}
-			
-			//I don't know what happens
-			//Just write like stl
-			U * operator->() const {
-				return ptr+offset;
-			}
-			
-			//prefix ++operator
-			Iterator& operator++(){
-				++offset;
-				return *this;
-			}
-			//suffix ++operator
-			Iterator operator++(int){
-				Iterator __tmp(*this);
-				++offset;
-				return __tmp;
-			}
-			
-			//prefix -- operator
-			Iterator& operator--(){
-				--offset;
-				return *this;
-			}
-			//suffix -- operator
-			Iterator operator--(int){
-				Iterator __tmp(*this);
-				--offset;
-				return __tmp;
-			}
-
-			//operator +
-			Iterator& operator+(int n){
-				offset + n;
-				return *this;
-			}
-	};
-	//==========================================================
-
-
-
 
 	//friend std::ostream& operator<<(std::ostream &, const Array<T> &);
 	private:
@@ -122,10 +118,9 @@ template <typename T> class Array{
 		size_t cap;
 		//the real element
 		T * ptr;
-
 		//reference count
 		//int *ref_count;
-
+		
 		//get the least power of 2 which is greater than n
 		size_t get_least_power_2(size_t n){
 			size_t bits = 0;
@@ -196,7 +191,7 @@ template <typename T> class Array{
 		}
 
 	public:
-		typedef Iterator<T> iterator;
+		typedef Iterator__Seq<T> iterator;
 		//default constructor
 		//initialize size to 0 ,capacity to 1
 		Array(): sz(0), cap(1), ptr(new T[1]){ }
@@ -328,11 +323,11 @@ template <typename T> class Array{
 		}
 
 		iterator begin() const {
-			return Iterator<T>(ptr,0);
+			return Iterator__Seq<T>(ptr,0);
 		}
 		
 		iterator end() const {
-			return Iterator<T>(ptr,sz);
+			return Iterator__Seq<T>(ptr,sz);
 		}
 		
 		void insert(iterator pos, const T &t){
@@ -345,8 +340,8 @@ template <typename T> class Array{
 			__erase__(p);
 		}
 		
-//		template <typename InputIterator>
-//		void insert(iterator pos, InputIterator beg, InputIterator end){
+//		template <typename InputIterator__Seq>
+//		void insert(iterator pos, InputIterator__Seq beg, InputIterator__Seq end){
 //			
 //		}
 		
