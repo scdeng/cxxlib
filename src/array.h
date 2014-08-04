@@ -28,6 +28,92 @@ template <typename T> std::ostream & operator<<(std::ostream &os, const Array<T>
 
 template <typename T> class Array{
 
+
+	//=============================================
+	//iterator class of List
+	template <typename U> class Iterator{
+		template <typename TYPE> friend class List;
+		private:
+			U *ptr;
+			int offset;
+		public:
+
+			//default constructor
+			//dereference this iterator occurs an error
+			Iterator(): ptr(NULL), offset(0) { }
+
+			//construct Iterator at node
+			Iterator(U *_ptr, int _offset) : ptr(_ptr), offset(_offset) {}
+
+			//copy constructor
+			Iterator(const Iterator &from){
+				ptr = from.ptr;
+				offset = from.offset;
+			}
+
+			//copy assignment
+			Iterator& operator=(const Iterator &that){
+				ptr = that.ptr;
+				offset = that.offset;
+				return *this;
+			}
+			
+			//compare 
+			bool operator!=(const Iterator &that) const {
+
+				return ( ptr != that.ptr  || offset != that.offset  )
+			}
+
+			bool operator==(const Iterator &that) const {
+				return ( ptr == that.ptr  && offset == that.offset );
+			}
+
+			//dereference returning an object 
+			U& operator*() const {
+				return *(ptr + offset);
+			}
+			
+			//I don't know what happens
+			//Just write like stl
+			U * operator->() const {
+				return ptr+offset;
+			}
+			
+			//prefix ++operator
+			Iterator& operator++(){
+				++offset;
+				return *this;
+			}
+			//suffix ++operator
+			Iterator operator++(int){
+				Iterator __tmp(*this);
+				++offset;
+				return __tmp;
+			}
+			
+			//prefix -- operator
+			Iterator& operator--(){
+				--offset;
+				return *this;
+			}
+			//suffix -- operator
+			Iterator operator--(int){
+				Iterator __tmp(*this);
+				--offset;
+				return __tmp;
+			}
+
+			//operator +
+			Iterator& operator+(int n){
+				offset + n;
+				return *this;
+			}
+	};
+	//==========================================================
+
+
+
+
 	//friend std::ostream& operator<<(std::ostream &, const Array<T> &);
 	private:
 		//no. of elements
@@ -62,6 +148,8 @@ template <typename T> class Array{
 		}
 
 	public:
+
+		typedef Iterator<T> iterator;
 		//default constructor
 		//initialize size to 0 ,capacity to 1
 		Array(): sz(0), cap(1), ptr(new T[1]){ }
@@ -169,7 +257,6 @@ template <typename T> class Array{
 			check_index(idx);
 			//there is no room for new item
 			if ( sz == cap ){
-
 				//allocate new space
 				T * new_ptr = new T[cap << 1];
 				//copy from old to new space
@@ -184,16 +271,13 @@ template <typename T> class Array{
 				for(unsigned i=idx; i<sz; ++i){
 					*(new_ptr+i+1) = *(ptr+i);
 				}
-
 				//increament sz
 				++sz;
 				//double capacity
 				cap *= 2;
-				
 				//delete old space
 				delete [] ptr;
 				ptr = new_ptr;
-
 			}else{
 				//move data  
 				for(unsigned i=sz; i>idx; --i){
@@ -217,12 +301,19 @@ template <typename T> class Array{
 		}
 
 		//clear the element of Array
-		//
 		void clear(){
 			delete [] ptr;
 			ptr = new T[1];
 			sz = 0;
 			cap = 1;
+		}
+
+		iterator begin() const {
+			return Iterator<T>(ptr,0);
+		}
+		
+		iterator end() const {
+			return Iterator<T>(ptr,sz);
 		}
 
 		//return the size of Array
