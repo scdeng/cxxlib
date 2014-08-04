@@ -32,10 +32,10 @@ template <typename T> class Array{
 	//=============================================
 	//iterator class of List
 	template <typename U> class Iterator{
-		template <typename TYPE> friend class List;
+		template <typename TYPE> friend class Array;
 		private:
 			U *ptr;
-			int offset;
+			unsigned offset;
 		public:
 
 			//default constructor
@@ -61,7 +61,7 @@ template <typename T> class Array{
 			//compare 
 			bool operator!=(const Iterator &that) const {
 
-				return ( ptr != that.ptr  || offset != that.offset  )
+				return ( ptr != that.ptr  || offset != that.offset  );
 			}
 
 			bool operator==(const Iterator &that) const {
@@ -138,7 +138,7 @@ template <typename T> class Array{
 		}
 		
 		void check_index(size_t i) const {
-			if( i >= sz || i < 0){
+			if( i > sz || i < 0){
 				//delete pointer
 				delete [] ptr;
 				std::cerr<< "index is " << i <<std::endl;
@@ -146,9 +146,56 @@ template <typename T> class Array{
 				exit(1);
 			}
 		}
+		
+		void __insert__(size_t idx, const T &t){
+			//there is no room for new item
+			if ( sz == cap ){
+				//allocate new space
+				T * new_ptr = new T[cap << 1];
+				//copy from old to new space
+				//index [0...idx-1]
+				for(unsigned i=0; i<idx; ++i){
+					*(new_ptr+i) = *(ptr+i);
+				}
+				//set ptr[idx] to t
+				*(new_ptr+idx) = t;
+				//copy the remaining data
+				//index [idx+1 ... sz
+				for(unsigned i=idx; i<sz; ++i){
+					*(new_ptr+i+1) = *(ptr+i);
+				}
+				//increament sz
+				++sz;
+				//double capacity
+				cap *= 2;
+				//delete old space
+				delete [] ptr;
+				//reset ptr
+				ptr = new_ptr;
+			}else{
+				//move data  
+				for(unsigned i=sz; i>idx; --i){
+					*(ptr+i) = *(ptr+i-1);
+				}
+				//push data
+				*(ptr+idx) = t;
+				//increase data
+				++sz;
+			}
+		}
+		void __erase__(size_t idx){
+			if( idx >= sz ){
+				return ;
+			}
+			//move data
+			for(unsigned i=idx; i<sz-1; ++i){
+				*(ptr+i) = *(ptr+i+1);
+			}	
+			//decreament sz
+			--sz;
+		}
 
 	public:
-
 		typedef Iterator<T> iterator;
 		//default constructor
 		//initialize size to 0 ,capacity to 1
@@ -209,31 +256,32 @@ template <typename T> class Array{
 		//push t to the end of Array
 		//if there is no room reallocate enough memory
 		void push_back(const T &t){
-			//no capacity to push 
-			//increase cap to 2*cap
-			if(sz == cap){
-				T *new_ptr = new T[2*cap];
-#ifdef MEMCOPY
-				//bug prone
-				memcpy(new_ptr, ptr, sizeof(T) * sz);
-#else
-				for(unsigned i=0; i<sz;++i){
-					*(new_ptr+i) = *(ptr+i);
-				}
-#endif
-				new_ptr[sz++] = t;
-				cap *= 2;
-				delete [] ptr;
-				ptr = new_ptr;
-			}else{
-				ptr[sz++] = t;
-			}
+//			//no capacity to push 
+//			//increase cap to 2*cap
+//			if(sz == cap){
+//				T *new_ptr = new T[2*cap];
+//#ifdef MEMCOPY
+//				//bug prone
+//				memcpy(new_ptr, ptr, sizeof(T) * sz);
+//#else
+//				for(unsigned i=0; i<sz;++i){
+//					*(new_ptr+i) = *(ptr+i);
+//				}
+//#endif
+//				new_ptr[sz++] = t;
+//				cap *= 2;
+//				delete [] ptr;
+//				ptr = new_ptr;
+//			}else{
+//				ptr[sz++] = t;
+//			}
+			__insert__(sz, t);
 		}
 		
 		//erase the last element of Array
 		T pop_back(){
 			T t = *(ptr+sz-1);
-			this->erase(sz-1);
+			__erase__(sz-1);
 			return t;
 		}
 
@@ -255,49 +303,20 @@ template <typename T> class Array{
 		//insert t into position idx
 		void insert(size_t idx, const T &t){
 			check_index(idx);
-			//there is no room for new item
-			if ( sz == cap ){
-				//allocate new space
-				T * new_ptr = new T[cap << 1];
-				//copy from old to new space
-				//index [0...idx-1]
-				for(unsigned i=0; i<idx; ++i){
-					*(new_ptr+i) = *(ptr+i);
-				}
-				//set ptr[idx] to t
-				*(new_ptr+idx) = t;
-				//copy the remaining data
-				//index [idx+1 ... sz
-				for(unsigned i=idx; i<sz; ++i){
-					*(new_ptr+i+1) = *(ptr+i);
-				}
-				//increament sz
-				++sz;
-				//double capacity
-				cap *= 2;
-				//delete old space
-				delete [] ptr;
-				ptr = new_ptr;
-			}else{
-				//move data  
-				for(unsigned i=sz; i>idx; --i){
-					*(ptr+i) = *(ptr+i-1);
-				}
-				*(ptr+idx) = t;
-				++sz;
-			}
+			__insert__(idx, t);
 		}
 
 		//erase element in position idx 
 		//it is less efficient than linked list
 		void erase(size_t idx){
 			check_index(idx);
-			//move data
-			for(unsigned i=idx; i<sz-1; ++i){
-				*(ptr+i) = *(ptr+i+1);
-			}	
-			//decreament sz
-			--sz;
+//			//move data
+//			for(unsigned i=idx; i<sz-1; ++i){
+//				*(ptr+i) = *(ptr+i+1);
+//			}	
+//			//decreament sz
+//			--sz;
+			__erase__(idx);
 		}
 
 		//clear the element of Array
@@ -315,6 +334,21 @@ template <typename T> class Array{
 		iterator end() const {
 			return Iterator<T>(ptr,sz);
 		}
+		
+		void insert(iterator pos, const T &t){
+			size_t p = pos.offset;
+			__insert__(p, t);
+		}
+		
+		void erase(iterator pos){
+			size_t p = pos.offset;
+			__erase__(p);
+		}
+		
+//		template <typename InputIterator>
+//		void insert(iterator pos, InputIterator beg, InputIterator end){
+//			
+//		}
 
 		//return the size of Array
 		size_t size()const{
