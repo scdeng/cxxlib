@@ -187,4 +187,38 @@ class BreadthFirstPaths{
 		}
 };
 
+//connected component
+class CC{
+	private:
+		//visited
+		vector<bool> marked;
+		//which connected component
+		vector<int> __id;
+		//sz of 
+		vector<int> sz;
+		//no. of connedted component
+		int __count;
+
+		void dfs(Graph &g, int v);
+	public:
+		CC(Graph &g);
+		//return id of vertex v
+		int id(int v)const {
+			return __id[v];
+		}
+
+		//return no. of connected components
+		int count(){
+			return __count;
+		}
+
+		//u and v are connected ?
+		bool connected(int u, int v){
+			return __id[v] == __id[u];
+		}
+		//size of connected component of contains v
+		int size(int v){
+			return sz[ __id[v] ];
+		}
+};
 #endif 

@@ -174,5 +174,40 @@ deque<int> BreadthFirstPaths::pathTo(int v){
 }
 
 
+void CC::dfs(Graph &g, int v){
+	marked[v] = true;
+	__id[v] = __count;
+	++(sz[__count]);
+	list<int> L = g.adjacent(v);
+	for(list<int>::iterator it = L.begin(); it != L.end(); ++it){
+		if( !marked[*it] ){
+			dfs(g,*it);
+		}
+	}
+}
+
+CC::CC(Graph &g){
+	marked = vector<bool>(g.V(), false);
+	__id = vector<int>(g.V());
+	sz = vector<int>(g.V());
+	__count = 0;
+	for( int w=0; w<g.V(); ++w){
+		if( !marked[w] ){
+			dfs(g,w);	
+			__count++;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
