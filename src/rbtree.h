@@ -24,6 +24,8 @@
 #include <queue>
 #include <deque>
 
+#define DEBUG_CHECK
+#define DEBUG_TEST
 #define DEBUG_PRINT
 #ifdef DEBUG
 using namespace std;
@@ -31,6 +33,12 @@ using namespace std;
 
 #define maximum(A,B)  ( (A) > (B) ) ? (A) : (B)
 
+#ifdef DEBUG_TEST
+	static unsigned long NUM_OF_LEFT_ROTATION = 0;
+	static unsigned long NUM_OF_RIGHT_ROTATION = 0;
+	static unsigned long NUM_OF_INSERTION = 0;
+	static unsigned long NUM_OF_DELETION = 0;
+#endif
 const bool RED = true;
 const bool BLACK = false;
 
@@ -65,7 +73,6 @@ template <typename K, typename V> class RBTNode{
 
 template <typename K, typename V>
 class RBTree{
-
 	template <typename TS, typename US>
 		friend std::ostream& operator<<( std::ostream &os, RBTree<TS,US> &rbt);
 
@@ -123,6 +130,9 @@ class RBTree{
 
 		Node *insert(Node *p, const K &k, const V &v){
 			if( !p ){
+#ifdef DEBUG_TEST
+					++NUM_OF_INSERTION;
+#endif
 				return new Node(k,v,RED,1);
 			}
 			if( k == p->key ){
@@ -179,6 +189,9 @@ class RBTree{
 			x->sz = p->sz;
 			//update p's size
 			p->sz = size(p->left) + size(p->right) + 1;
+#ifdef DEBUG_TEST
+			++NUM_OF_LEFT_ROTATION;
+#endif
 			return x;
 		}
 
@@ -195,6 +208,9 @@ class RBTree{
 			p->color = RED;
 			x->sz = p->sz;
 			p->sz = 1 + size(p->left) + size(p->right);
+#ifdef DEBUG_TEST
+			++NUM_OF_RIGHT_ROTATION;
+#endif
 			return x;
 		}
 		
@@ -287,8 +303,11 @@ class RBTree{
 		}		
 		Node * removeMin(Node *p){
 			if( !p->left ) {
-				//something 
 				//delete node
+
+#ifdef DEBUG_TEST
+			++NUM_OF_DELETION;
+#endif
 				delete p;
 				return NULL;
 
@@ -305,6 +324,11 @@ class RBTree{
 	
 		// Assuming that p is red and both p->left and p->left->left
 		// are black, make p->left or one of its children red.
+		//
+		// p's left is a 2-node
+		// you shoud make it as a tmp 3-node, 4-node or 5-node
+		// by calling this function
+		// maitaining an invariant that next remove node is not a 2-node
 		Node* moveRedLeft(Node *p) {
 			assert (p != NULL);
 			assert (isRed(p) && !isRed(p->left) && !isRed(p->left->left) );
@@ -323,9 +347,12 @@ class RBTree{
 		}
 
 
-		//Assuming that p is red and both p->right and p->right->left
-		//are black, make p->right or one of its children red.
+		//when p's right child is a two node
+		//you should make p's right a tmp 3-node, 4-node or may 5-node
+		//by calling this move red function
+		//maitaining an invariant that next remove node is not a 2-node
 		Node* moveRedRight(Node *p){
+			//flip color and borrow
 			assert (p);
 			assert ( isRed(p) && !isRed(p->right) && !isRed(p->right->left) );
 			flipColors(p);
@@ -341,55 +368,234 @@ class RBTree{
 		}
 
 		Node * removeMax(Node *p){
-			//assert (p);
+			
+			//make it a right leaning tmp 3-node 
 			if( isRed(p->left) ){
 				p = rightRotate(p);
 			}
+			//
 			if( p->right == NULL ){
 				//delete
+#ifdef DEBUG_TEST
+				++NUM_OF_DELETION;
+#endif
 				delete p;
 				return NULL;
 			}
 			//p->right is a 2-node
 			if( !isRed(p->right) && !isRed(p->right->left) ){
 				p = moveRedRight(p);
-			}	
+			}
+			//recursively remove max of right subtree
 			p->right = removeMax(p->right);
 			return balance(p);
 		}
+
 		Node* remove(Node *p, const K &k){
 			//goes left
 			if ( k < p->key )  {
+				//p is a 2-node
+				//make it a tmp 4-node,maybe 5-node
+				//
 				if (!isRed(p->left) && !isRed(p->left->left)){
 					p = moveRedLeft(p);
 				}
+				//recursively remove k in subtree rooted at p->left
 				p->left = remove(p->left, k);
-			}
-			else {
+
+			} else {
+				//goes right or delete p
+				
+				//if p is a 3-node which means color of p->left is red
+				//then rotate right 
 				if (isRed(p->left)){
 					p = rightRotate(p);
 				}
+				//this is the end 
 				if ( k == p->key && (p->right == NULL)){
+					//delete node
+#ifdef DEBUG_TEST
+					++NUM_OF_DELETION;
+#endif
+					delete p;
 					return NULL;
 				}
-				//p's right and p's right's left are black and 
-				if (!isRed(p->right) && !isRed(p->right->left))
-				  p = moveRedRight(p);
+
+				//p's right and p's right's left are black and
+				//may rotate p->left as p and then go left
+				if (!isRed(p->right) && !isRed(p->right->left)){
+				  	p = moveRedRight(p);
+				}
+				
+				//k == p->key
+				//swap min(p->right) and p
+				//remove min of p->right
 				if (k == p->key) {
 					Node *x = min(p->right);
+					//swap p and min(p->right) 
 					p->key = x->key;
 					p->value = x->value;
-					// h.val = get(h.right, min(h.right).key);
-					// h.key = min(h.right).key;
+					//delete p->right min
 					p->right = removeMin(p->right);
 				}else {
+					//k > p->key
+					//recursively delete k subtree rooted at p->right
 					p->right = remove(p->right, k);
 				}
 			}
 			return balance(p);	
 		}
+
+		Node * floor(Node *p, const K &k){
+			if( !p ) {
+				return NULL;
+			}
+			if( k < p->key ){
+				//all right subtree of p are greater than k
+				return floor(p->left, k);
+			}else if ( k > p->key ){
+				Node *x = floor(p->right, k);
+				//if there exists a node x of p->right subtree
+				//that less than k, because x is greater than p
+				//return x
+				if( x ){
+					return x;
+				}else{
+					//no such node x whose key is less than or equal to k
+					//in subtree of p->right
+					return p;
+				}
+			}else{
+				return p;
+			}
+		}
+
+		Node * ceiling(Node *p, const K &k){
+			if( !p ) {
+				return NULL;
+			}
+			if( k < p->key ){
+			//k < p->key
+			//left subtree may exist a smallest one than p or may not
+				Node *x = ceiling(p->left, k);
+				if( x ){
+					//existance
+					return x;
+				}else{
+					//not 
+					return p;
+				}
+			}else if( k > p->key ){
+			//k > p->key
+				return ceiling(p->right, k);	
+			}else{
+			//k == p->key
+				return p;
+			}
+		}
+
+#ifdef DEBUG_CHECK
+		bool isLeftLeaning23tree(Node *p){
+			//NULL is a 2-3 tree
+			if( !p ) {
+				return true;
+			}
+			//right leaning
+			if( isRed(p->right) ){
+				return false;
+			}
+			if( p != root && isRed(p) && isRed(p->left) ){
+				return false;
+			}
+			return isLeftLeaning23tree(p->left) 
+				&& isLeftLeaning23tree(p->right);
+		}
+		bool isSizeConsistent(Node *p) {
+			if( !p ){
+				return true;
+			}
+			if( p->sz != 1 + size(p->left) + size(p->right) ){
+				return false;
+			}
+
+			return isSizeConsistent(p->left)
+				&& isSizeConsistent(p->right);
+		}
+		bool isBST(Node *p){
+			if( !p ) {
+				return true;
+			}
+			if( p->left ){
+				Node *max_p = max(p->left);
+				if( max_p && !( max_p->key < p->key ) ){
+					return false;
+				}
+			}
+
+			if( p->right ){
+				Node *min_p = min(p->right);
+				if( min_p && !(min_p->key > p->key) ){
+					return false;
+				}
+			}	
+			return isBST(p->left) && isBST(p->right);
+		}
+#endif
 	public:
 		
+#ifdef DEBUG_CHECK
+		bool isRankConsistent(){
+			for(unsigned i=0; i<size(); ++i){
+				if(i != rank( select(i) ) ){
+					return false;
+				}
+			}
+			return true;
+		}
+		bool isBalancedSearchTree(){
+			return isBST(root);
+		}
+		bool isSizeConsistent()	{
+			return isSizeConsistent(root);
+		}
+		bool isLeftLeaning23tree(){
+			return isLeftLeaning23tree(root);
+		}
+#endif
+		
+		
+		/*	@brief smallest key greater than or equal to k
+		 *	@param k 	key
+		 */
+		K ceiling(const K &k){
+			Node *p = ceiling(root, k);
+			if( !p ){
+				std::cerr << "no such key" << std::endl;
+				std::cerr << "key returned is not undefined" << std::endl;
+				return K();
+			}
+			return p->key;
+		}
+
+
+		/*	@brief largest key less than and equal to k
+		 *	@param k	key
+		 */
+		K floor(const K &k){
+			Node * p = floor(root, k);
+			if( !p ){
+				std::cerr << "no such key" << std::endl;
+				std::cerr << "key returned is not undefined" << std::endl;
+				return K();
+			}
+			return p->key;
+		}
+
+		/*	@brief 	remove a node with key equals to k
+		 *			if k is not contained output an error message
+		 *			
+		 *	@param k key to be remove
+		 */
 		void remove(const K &k){
 			if( !contain(k) ){
 				std::cerr << "BST not contains keys " << k << std::endl;
@@ -404,7 +610,10 @@ class RBTree{
 				root->color = BLACK;
 			}
 		}
-
+		
+		/*	@brief 	remove maximum key of BST
+		 *			if BST is empty, output an error message
+		 */
 		void removeMax(){
 			if( empty() ){
 				std::cerr<<"remove empty BST error..."<<std::endl;
@@ -422,7 +631,11 @@ class RBTree{
 			}
 
 		}
+		
 
+		/*	@brief 	remove minimum key of BST
+		 *			if BST is empty, output an error message
+		 */
 		void removeMin(){
 			if( empty() ){
 				std::cerr<<"remove empty BST error..."<<std::endl;
@@ -440,60 +653,92 @@ class RBTree{
 			}
 		}
 
-		//return ordered keys in a queue
+		/* 	@brief	return ordered keys in a queue
+		 */
 		std::deque<K> keys(){
 			std::deque<K> q;
 			keys(q, root);
 			return q;
 		}
+		
+		/*	@brief return number of BST
+		 */
+		unsigned size(){
+			return size(root);
+		}
 
-		//return kth key in subtree
-		K select(const K &k){
+		/*	@brief return k th key zero started
+		 */
+		K select(unsigned k){
 			Node *p = select(root, k);
 			assert(p);
 			return p->key;
 		}
 
-		//return no. of keys less than k
+		/*	@brief 	return number of keys less than k
+		 *	@param k, K type
+		 */
 		unsigned rank(const K &k) {
 			return rank(root, k);
 		}
 
-		//return minimum node of subtree rooted at p
+		/*	@brief 	return minimum key of BST
+		 *			if BST is empty, output an error message
+		 */
 		K min (){
-			assert( !empty() );
 			Node *p = min(root);
+			if( p == NULL ){
+				std::cerr<<"access empty BST error..."<<std::endl;
+				std::cerr<<"key returned is not defined" << std::endl;
+				return K();
+			}
 			return p->key;
 		}
 
-		//return maximum node of subtree rooted at p
+		/*	@brief 	return maximum key of BST
+		 *			if BST is empty, output an error message
+		 */
 		K max() {
-			//non-empty red black tree
-			assert( !empty() );
 			Node *p = max(root);
+			if( p == NULL ){
+				std::cerr<<"access empty BST error..."<<std::endl;
+				std::cerr<<"key returned is not defined" << std::endl;
+				return K();
+			}
 			return p->key;
 		}
 
 		//insert k,v pair
+		/*	@brief	insert a k,v pair into BST
+		 *	@param k 	key
+		 *	@param v	value
+		 */
 		void insert( const K &k, const V &v){
 			root = insert(root, k, v);	
 			root->color = BLACK;
 		}
 
-		//height of tree
+		/*	@brief	return height of BST
+		 *
+		 */
 		int height() const {
 			return height(root);
 		}
 
-		//return true if root is NULL
+		/*	@brief 	return true BST is empty
+		 *			else return false
+		 */
 		bool empty()const {
 			return root == NULL;
 		}
 		
-		//return value associated with key
+		/*	@brief 	return value associated with key
+		 *			if k is not contained
+		 *				output an error message
+		 */
 		V get(const K &k){
 			Node *p = get(root,k);
-			assert( p );
+			//assert( p );
 			if( !p ){
 				std::cerr<<"key is not contained..." << std::endl;
 				std::cerr<<"value returned is not defined..." << std::endl;
@@ -502,13 +747,20 @@ class RBTree{
 			return p->value;
 		}
 
-		//return true if tree contains k
-		//return false otherwise
+		/*	@brief check if k is contained
+		 *
+		 */
 		bool contain(const K &k){
 			return ( get(root,k) != NULL );
 		}
-			
+		
+		/*	@brief 	default constructor
+		 *			construct an empty BST
+		 */
 		RBTree(): root(NULL) { }
+		/*	@brief 	destructor
+		 *			delete all nodes
+		 */
 		~RBTree(){
 			while( root ){
 				removeMin();
@@ -551,14 +803,14 @@ std::ostream& operator<<( std::ostream &os, const RBTNode<Tp1,Tp2> &node ){
 //four lines per node whose children are included
 template <typename K, typename V>
 std::ostream& operator<<( std::ostream &os, RBTree<K,V> &rbt){
-	os << "=================red black tree structure==================="<<std::endl;
+	os << "=========red black tree structure==============="<<std::endl;
 	RBTNode<K,V> *p = rbt.root;
 	if( !p ) {
 		os << "Empty red black tree" << std::endl;
 		return os;
 	}
 	traverse(os, p);
-	os << "============red black tree structure== the end==========="<<std::endl;
+	os << "=========red black tree structure the end========"<<std::endl;
 	return os;
 }
 
