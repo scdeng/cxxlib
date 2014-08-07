@@ -3,7 +3,11 @@
  *
  *       Filename:  rbtree.h
  *
- *    Description:  
+ *    Description: a C++ template implementation of red black tree 
+ *    which is one-to-one corresponding a left leaning 2-3 tree
+ *    implementation based on Algorithm 4th by Sedgewick and Wayne.
+ *    the worst case of height is 2log(n).
+ *    
  *
  *        Version:  1.0
  *        Created:  08/06/2014 09:08:00 AM
@@ -131,7 +135,8 @@ class RBTree{
 		Node *insert(Node *p, const K &k, const V &v){
 			if( !p ){
 #ifdef DEBUG_TEST
-					++NUM_OF_INSERTION;
+				//how many times you insert
+				++NUM_OF_INSERTION;
 #endif
 				return new Node(k,v,RED,1);
 			}
