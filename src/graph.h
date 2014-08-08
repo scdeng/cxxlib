@@ -18,6 +18,7 @@
 
 #ifndef GRAPH_H
 #define GRAPH_H
+#include <cassert>
 #include <deque> 
 #include <iostream>
 #include <fstream>
@@ -48,48 +49,55 @@ class Graph{
 		//adjacent list
 		vector<list<int> > adj;		
 		
-		//check v 
-		bool check_vertex(int v);
+		/*	@brief check if v is a valid vertex
+		 */
+		bool check_vertex(int v)const;
 
 	public:
-		//create an empty graph
+		
+		/*	@brief create an empyt graph
+		 */
 		Graph(): _v(0), _e(0), adj(vector<list<int> > () ){ }
+		/*	@brief create a graph with input stream
+		 */
 		Graph(istream &is);
+
+		/*	@brief create a graph with n vertices and no edge
+		 */
 		Graph(int N){
 			_v = N;
 			_e = 0;
 			adj = vector<list<int> >(N);
 		}
-
-		list<int> adjacent(int v){
+		
+		/*	@brief	return an object not reference of v's adjacent list
+		 */ 
+		const list<int>& adjacent(int v)const{
+			assert ( check_vertex(v) );
 			return adj[v];
 		}
-
-		//not check for duplicate edge
+		
+		/*	@brief add an edge connect u and v
+		 *		not check for duplicate edge
+		 *	@param u	vertex u
+		 *	@param v	vertex v
+		 */
 		void addEdge(int u, int v){
 			adj[u].push_back(v);
 			adj[v].push_back(u);
 			++_e;
 		}
+
+		/*	@brief return number of vertices
+		 */
 		int V() const { return _v; }
+		/*	@brief return num of edges
+		 */
 		int E() const { return _e; }
-	
-
 };
-//print graph
-//	os << g.V() << " verices and " << g.E() << " edges" << endl;
-//	for(int i=0; i<g._v; i++){
-//		os << i << " : " ;
-//		for(list<int>::iterator it = (g.adj[i]).begin();
-//					it != (g.adj[i]).end(); ++it){
-//			os << *it << " ";
-//		}
-//		os << endl;
-//	}
-//	return os;
-//}
 
-
+/*	@brief Depth First search Tree
+ */
 class DepthFirstPaths{
 #ifdef DEBUG_PRINT
 	friend ostream& operator<<(ostream&, DepthFirstPaths &);
@@ -103,11 +111,15 @@ class DepthFirstPaths{
 		int __count;
 		//source vertex
 		int __s;
-		void dfs(Graph &g, int v);
+
+		/*	@brief depth first search construct a search tree
+		 */
+		void dfs(const Graph &g, int v);
 
 	public:
-
-		DepthFirstPaths(Graph &g, int s){
+		/*	@brief constructor with a graph	and a source
+		 */
+		DepthFirstPaths(const Graph &g, int s){
 			__s = s;
 			marked = vector<bool>(g.V(), false);
 			edgeTo = vector<int>(g.V(),-1);
@@ -115,18 +127,23 @@ class DepthFirstPaths{
 			dfs(g,s);
 		}
 	
-		//return a path from s to v
-		//depth first search path
-		inline deque<int> pathTo(int v);
-		
-		bool connected(int v){
+		/*	@brief bfs path from s to v
+		 */
+		inline deque<int> pathTo(int v)const;
+	
+		/*	@brief check v is reachable
+		 */
+		bool connected(int v)const{
 			return marked[v];
 		}
-
-		bool hasPathTo(int v){
+		/*	@brief check if there exists a path from s to v
+		 */
+		bool hasPathTo(int v)const{
 			return marked[v];
 		}
-		int count(){
+		/*	@brief how many components 
+		 */
+		int count()const{
 			return __count;
 		}
 };
@@ -145,13 +162,18 @@ class BreadthFirstPaths{
 		vector<int> edgeTo;
 		//distance to vertex v
 		vector<int> distTo;
-		//...
-		void bfs(Graph &g, int s);
-		
-		void bfs(Graph &g, const vector<int> &sources);
+		/*	@brief bfs
+		 */
+		void bfs(const Graph &g, int s);
+
+		/*	@brief breadth first search to construct a search forest
+		 */
+		void bfs(const Graph &g, const vector<int> &sources);
 
 	public:
-		BreadthFirstPaths(Graph &g, int s){
+		/*	@brief construct with a graph
+		 */
+		BreadthFirstPaths(const Graph &g, int s){
 			marked = vector<bool>(g.V(), false);
 			edgeTo = vector<int>(g.V());
 			for(int i=0; i<g.V(); ++i){
@@ -161,9 +183,11 @@ class BreadthFirstPaths{
 			bfs(g,s);
 		}
 
-		
-
-		BreadthFirstPaths(Graph &g, const vector<int> &sources){
+		/*	@brief construct with a graph and a vector of sources
+		 *	@param g	graph
+		 *	@param sources
+		 */
+		BreadthFirstPaths(const Graph &g, const vector<int> &sources){
 			marked = vector<bool>(g.V(), false);
 			edgeTo = vector<int>(g.V());
 			for(int i=0; i<g.V(); ++i){
@@ -174,15 +198,15 @@ class BreadthFirstPaths{
 		}
 
 		//return path fron source to v
-		deque<int> pathTo(int v);
+		deque<int> pathTo(int v)const;
 	
 		//return true if there exists a path to v	
-		bool hasPathTo(int v){
+		bool hasPathTo(int v)const{
 			return marked[v];
 		}
 		
 		//distance from source to v
-		int distanceTo(int v){
+		int distanceTo(int v)const{
 			return distTo[v];
 		}
 };
@@ -199,25 +223,25 @@ class CC{
 		//no. of connedted component
 		int __count;
 
-		void dfs(Graph &g, int v);
+		void dfs(const Graph &g, int v);
 	public:
-		CC(Graph &g);
+		CC(const Graph &g);
 		//return id of vertex v
 		int id(int v)const {
 			return __id[v];
 		}
 
 		//return no. of connected components
-		int count(){
+		int count()const{
 			return __count;
 		}
 
 		//u and v are connected ?
-		bool connected(int u, int v){
+		bool connected(int u, int v)const{
 			return __id[v] == __id[u];
 		}
 		//size of connected component of contains v
-		int size(int v){
+		int size(int v)const{
 			return sz[ __id[v] ];
 		}
 };

@@ -38,8 +38,7 @@ Graph::Graph(istream &is){
 	}
 }
 //check v 
-bool Graph::check_vertex(int v){
-
+bool Graph::check_vertex(int v)const{
 	if( v >= _v || v < 0) {
 		std::cerr<< "vertex index out of bounds..." << endl;
 		return false;
@@ -47,8 +46,8 @@ bool Graph::check_vertex(int v){
 	return true;
 }
 
-
-void DepthFirstPaths::dfs(Graph &g, int v){
+//
+void DepthFirstPaths::dfs(const Graph &g, int v){
 	__count++;
 	marked[v] = true;
 	list<int> adj = g.adjacent(v);
@@ -60,9 +59,10 @@ void DepthFirstPaths::dfs(Graph &g, int v){
 		}
 	}
 }
-//return a path from s to v
-//depth first search path
-deque<int> DepthFirstPaths::pathTo(int v){
+
+/*	@brief return a path fron s(source) to v
+ */
+deque<int> DepthFirstPaths::pathTo(int v)const{
 	deque<int> path;
 	if( !hasPathTo(v) ){
 		return path;
@@ -111,8 +111,9 @@ ostream& operator<<(ostream &os, BreadthFirstPaths &bfs){
 }
 #endif
 
-//breadth first search
-void BreadthFirstPaths::bfs(Graph &g, int s){
+/*	@brief breadth first search to construct a search tree
+ */
+void BreadthFirstPaths::bfs(const Graph &g, int s){
 	queue<int> q;
 	q.push(s);
 	marked[s] = true;
@@ -120,23 +121,28 @@ void BreadthFirstPaths::bfs(Graph &g, int s){
 	distTo[s] = 0;
 	while( !q.empty() ){
 		int v = q.front();
+		//search v's adjacents
 		list<int> L = g.adjacent(v);
-		for(list<int>::iterator it = L.begin(); 
+		for(list<int>::const_iterator it = L.begin(); 
 					it != L.end(); ++it){
-			if( !marked[*it] ){
-				marked[*it] = true;
-				distTo[*it] = distTo[v] + 1;
-				edgeTo[*it] = v;
-				q.push(*it);
+			int w = *it;
+			if( !marked[w] ){
+				marked[w] = true;
+				distTo[w] = distTo[v] + 1;
+				edgeTo[w] = v;
+				q.push(w);
 			}
 		}
+		//pop a vertex whose adjacents are searched
 		q.pop();
 	}
 }
 
-
-void BreadthFirstPaths::bfs(Graph &g, const vector<int> &sources){
+/*	@brief breadth first search to construct a search forest
+ */
+void BreadthFirstPaths::bfs(const Graph &g, const vector<int> &sources){
 	queue<int> q;
+	//enque all sources
 	for(unsigned i=0; i<sources.size(); ++i){
 		q.push( sources[i] );
 		marked[ sources[i] ] = true;
@@ -144,23 +150,26 @@ void BreadthFirstPaths::bfs(Graph &g, const vector<int> &sources){
 	}
 	while( !q.empty() ){
 		int v = q.front();
+		//search v's adjacent
 		list<int> L = g.adjacent(v);
-		for(list<int>::iterator it = L.begin(); 
+		for(list<int>::const_iterator it = L.begin(); 
 					it != L.end(); ++it){
-			if( !marked[*it] ){
-				marked[*it] = true;
-				distTo[*it] = distTo[v] + 1;
-				edgeTo[*it] = v;
-				q.push(*it);
+			int w = *it;
+			if( !marked[w] ){
+				marked[w] = true;
+				distTo[w] = distTo[v] + 1;
+				edgeTo[w] = v;
+				q.push(w);
 			}
 		}
+		//pop v
 		q.pop();
 	}
 
 }
-//return a path from s to v
-//depth first search path
-deque<int> BreadthFirstPaths::pathTo(int v){
+/*	@brief breadth first search path from s to v
+ */
+deque<int> BreadthFirstPaths::pathTo(int v)const{
 	deque<int> path;
 	if( !hasPathTo(v) ){
 		return path;
@@ -173,8 +182,9 @@ deque<int> BreadthFirstPaths::pathTo(int v){
 	return path;
 }
 
-
-void CC::dfs(Graph &g, int v){
+/*	@brief depth first search to compute connected component
+ */
+void CC::dfs(const Graph &g, int v){
 	marked[v] = true;
 	__id[v] = __count;
 	++(sz[__count]);
@@ -185,8 +195,9 @@ void CC::dfs(Graph &g, int v){
 		}
 	}
 }
-
-CC::CC(Graph &g){
+/*	@brief Connect component constructor
+ */
+CC::CC(const Graph &g){
 	marked = vector<bool>(g.V(), false);
 	__id = vector<int>(g.V());
 	sz = vector<int>(g.V());
@@ -198,16 +209,4 @@ CC::CC(Graph &g){
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
