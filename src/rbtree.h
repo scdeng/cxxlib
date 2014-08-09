@@ -7,6 +7,10 @@
  *    which is one-to-one corresponding a left leaning 2-3 tree
  *    implementation based on Algorithm 4th by Sedgewick and Wayne.
  *    the worst case of height is 2log(n).
+ *
+ *    red black tree can be seen as a binary tree when ignoring color
+ *    also it can be treated as a 2-3 tree when node with red color is 
+ *    treated as one node with its parent
  *    
  *
  *        Version:  1.0
@@ -51,7 +55,7 @@ template <typename K, typename V> class RBTree;
 template <typename K, typename V> class RBTNode{
 
 	template <typename U, typename S>
-		friend void traverse(std::ostream &os, RBTNode<U,S> *p);
+		friend void traverse(std::ostream &os, const RBTNode<U,S> *p);
 
 	template <typename T, typename Tp>
 		friend std::ostream& operator<<( std::ostream &, const RBTNode<T,Tp>& );
@@ -65,12 +69,16 @@ template <typename K, typename V> class RBTNode{
 		V value;
 		//color
 		bool color;
-		//size of subtree
-		int sz;
+		//size of tree rooted here
+		size_t sz;
+		//left subtree
 		RBTNode *left;
+		//right subtree
 		RBTNode *right;
 
 	public:
+		/*	@brief constructor
+		 */
 		RBTNode(const K &k, const V &v, bool c, int s):
 			key(k), value(v), color(c), sz(s),left(NULL), right(NULL) { }
 };
@@ -78,23 +86,40 @@ template <typename K, typename V> class RBTNode{
 template <typename K, typename V>
 class RBTree{
 	template <typename TS, typename US>
-		friend std::ostream& operator<<( std::ostream &os, RBTree<TS,US> &rbt);
+		friend std::ostream& operator<<( std::ostream &os, const RBTree<TS,US> &rbt);
 
 	typedef RBTNode<K,V> Node;
 
 	private:
+		//root of red black tree
 		Node *root;
-		bool isRed(Node *p){
+		
+		/*	@brief check if a tree is red
+		 *		node is red if and only if node is not null and its color is red
+		 *		note: NULL node is black
+		 *	@param	p	red black node
+		 */
+		bool isRed(Node *p)const{
 			if ( !p ) return false;
 			return p->color == RED;
 		}
-		int size(Node *p){
+
+		/*	@brief return size of tree rooted at p
+		 *		return 0 if p is NULL
+		 *		else return 1 + size(p->left) + size(p->right)
+		 *	@param p	red black tree node
+		 */
+		int size(Node *p)const{
 			if( !p ) return 0;
 			return p->sz;
 		}
 
-		//reccursively get key	
-		Node * get(Node *p, const K &k){
+		/*	@brief search k in tree rooted at p
+		 *		recursively search k
+		 *	@param p	red black node
+		 *	@param k	key to be searched
+		 */
+		Node * get(Node *p, const K &k)const{
 			if( !p ) return p;
 			if( k == p->key ){
 				//k == p->key
@@ -107,17 +132,31 @@ class RBTree{
 				return get(p->right,k);
 			}
 		}
-
+		
+		/*	@brief return max of two integers
+		 */
 		int max(int a, int b)const{
 			return a > b ? a : b;
 		}
-
+		
+		/*	@brief return height of tree rooted p
+		 *		recursively
+		 *	@param p 	red black tree node
+		 */
 		int height(const Node *p)const{
 			if( !p ) return 0;
 			return 1 + max( height(p->left), height(p->right) );
 		}
 
 		//flip p and its children's color
+		/*	@brief flip p and p's two children's colors
+		 *		assume that 
+		 *	assert all p && p->left && p->right are non-NULL
+		 *	assert ( p  && p->left && p->right );
+		 *	assert p's color is opposite to its children
+		 *	these two children have same color
+         *
+		 */
 		void flipColors(Node *p){
 			//assert all p && p->left && p->right are non-NULL
 			//assert ( p  && p->left && p->right );
@@ -132,6 +171,9 @@ class RBTree{
 			p->right->color = !p->right->color;
 		}
 
+
+		/*	@brief insert a node and adjust the height
+		 */
 		Node *insert(Node *p, const K &k, const V &v){
 			if( !p ){
 #ifdef DEBUG_TEST
@@ -174,7 +216,8 @@ class RBTree{
 			return p;
 		}
 
-		//left rotation
+		/*	@brief left rotation
+		 */
 		Node* leftRotate(Node *p){
 			//assert p is not NULL and p's right's color is red
 			assert ( (p) && isRed(p->right) );
@@ -200,7 +243,8 @@ class RBTree{
 			return x;
 		}
 
-		//right rotation
+		/*	@brief right rotation
+		 */
 		Node* rightRotate(Node *p){
 			//assert p is not NULL
 			//p's left is red
@@ -219,8 +263,9 @@ class RBTree{
 			return x;
 		}
 		
-		//return maximum node of subtree rooted at p
-		Node* max(Node *p){
+		/*	@brief return maximum node of subtree rooted at p
+		 */
+		Node* max(Node *p)const{
 			if( !p ) return p;
 			while( p->right ){
 				p = p->right;
@@ -228,8 +273,9 @@ class RBTree{
 			return p;
 		}
 		
-		//return minimum node of subtree rooted at p
-		Node* min(Node *p){
+		/*	@brief return minimum node of subtree rooted at p
+		 */
+		Node* min(Node *p)const{
 			if( !p ) return p;
 			while( p->left ){
 				p = p->left;
@@ -237,8 +283,9 @@ class RBTree{
 			return p;
 		}
 
-		//return no. of keys in subtree rooted at p less than k
-		unsigned rank(Node *p, const K &k){
+		/*	@brief return no. of keys in subtree rooted at p less than k
+		 */
+		size_t rank(Node *p, const K &k)const{
 			// p is null return 0
 			if( !p ) return 0;
 			//p->key == k
@@ -259,11 +306,12 @@ class RBTree{
 			}
 		}
 
-		//select k th key in subtree of p
-		Node * select(Node *p, unsigned k){
+		/*	@brief select k th key in subtree of p
+		 */
+		Node * select(Node *p, size_t k)const{
 			if ( !p ) return NULL;
 
-			unsigned t = size(p->left);
+			size_t t = size(p->left);
 			if ( t > k ){
 				return select( p->left, k);
 			}else if ( t < k ){
@@ -273,22 +321,28 @@ class RBTree{
 			}
 		}
 		
-		//collect all keys in increasing order
-		void keys(std::deque<K> &q, Node *p){
+		/*	@brief collect all keys in increasing order in a queue
+		 *	@param q	q
+		 *	@param p	red black tree node
+		 */
+		void getAllKeys(Node *p, std::vector<K> &vec)const{
 			if( !p ) return;
 			//collect left subtree
-			keys(q,p->left);
+			getAllKeys(p->left, vec);
 			//enque p's key
-			q.push_back(p->key);
+			vec.push_back(p->key);
 			//collect right subtree
-			keys(q,p->right);
+			getAllKeys(p->right, vec);
 		}
 		
 		
-
+		/*	@brief balance a red black subtree rooted at p
+		 *		p is right leaning rotate left
+		 *		p is a tree node rotate right
+		 *		p has two red child flip color
+		 */
 		Node* balance(Node *p){
 			assert (p);
-			
 			//right is red ratate left
 			if( isRed(p->right) ){
 				p = leftRotate(p);
@@ -305,35 +359,35 @@ class RBTree{
 			}
 			p->sz = 1 + size(p->left) + size(p->right);
 			return p;
-		}		
+		}	
+		/*	@brief remove minimum key of subtree rooted at p
+		 */
 		Node * removeMin(Node *p){
 			if( !p->left ) {
 				//delete node
-
 #ifdef DEBUG_TEST
 			++NUM_OF_DELETION;
 #endif
 				delete p;
 				return NULL;
-
 			}
 			//indicate that p->left is a 2-node
 			//so...create a tmp 3-node or 4-node
 			if( !isRed(p->left) && !isRed(p->left->left) ){
 				p = moveRedLeft(p);
 			}
-
 			p->left = removeMin(p->left);
 			return balance(p);	
 		}
-	
-		// Assuming that p is red and both p->left and p->left->left
-		// are black, make p->left or one of its children red.
-		//
-		// p's left is a 2-node
-		// you shoud make it as a tmp 3-node, 4-node or 5-node
-		// by calling this function
-		// maitaining an invariant that next remove node is not a 2-node
+
+		/* @brief Assuming that p is red and both p->left and p->left->left
+		 * 		are black, make p->left or one of its children red.
+		 * 		p's left is a 2-node
+		 * 		you shoud make it as a tmp 3-node, 4-node or 5-node
+		 * 		by calling this function
+		 * 		maitaining an invariant that next remove node is not a 2-node
+		 *	Note: this is a delete helper
+		 */
 		Node* moveRedLeft(Node *p) {
 			assert (p != NULL);
 			assert (isRed(p) && !isRed(p->left) && !isRed(p->left->left) );
@@ -351,11 +405,12 @@ class RBTree{
 			return p;
 		}
 
-
-		//when p's right child is a two node
-		//you should make p's right a tmp 3-node, 4-node or may 5-node
-		//by calling this move red function
-		//maitaining an invariant that next remove node is not a 2-node
+		/*	@brief when p's right child is a two node
+		 *			you should make p's right a tmp 3-node, 4-node or may 5-node
+		 *			by calling this move red function
+		 *			maitaining an invariant that next remove node is not a 2-node
+		 *	Note: this is a delete helper
+		 */
 		Node* moveRedRight(Node *p){
 			//flip color and borrow
 			assert (p);
@@ -372,13 +427,13 @@ class RBTree{
 			return p;
 		}
 
+		/*	@brief remove maximum key in subtree rooted at p
+		 */
 		Node * removeMax(Node *p){
-			
 			//make it a right leaning tmp 3-node 
 			if( isRed(p->left) ){
 				p = rightRotate(p);
 			}
-			//
 			if( p->right == NULL ){
 				//delete
 #ifdef DEBUG_TEST
@@ -396,6 +451,8 @@ class RBTree{
 			return balance(p);
 		}
 
+		/*	@brief remove node with key equal to k in subtree rooted at p
+		 */
 		Node* remove(Node *p, const K &k){
 			//goes left
 			if ( k < p->key )  {
@@ -431,7 +488,6 @@ class RBTree{
 				if (!isRed(p->right) && !isRed(p->right->left)){
 				  	p = moveRedRight(p);
 				}
-				
 				//k == p->key
 				//swap min(p->right) and p
 				//remove min of p->right
@@ -451,7 +507,9 @@ class RBTree{
 			return balance(p);	
 		}
 
-		Node * floor(Node *p, const K &k){
+		/*	@brief maximum key which is less than or equal to k
+		 */
+		Node * floor(Node *p, const K &k)const{
 			if( !p ) {
 				return NULL;
 			}
@@ -474,8 +532,10 @@ class RBTree{
 				return p;
 			}
 		}
-
-		Node * ceiling(Node *p, const K &k){
+		
+		/*	@brief smallest key which is greater than or equal to k
+		 */
+		Node * ceiling(Node *p, const K &k)const{
 			if( !p ) {
 				return NULL;
 			}
@@ -499,80 +559,153 @@ class RBTree{
 			}
 		}
 
-#ifdef DEBUG_CHECK
-		bool isLeftLeaning23tree(Node *p){
+		/*	@brief check if subtree rooted p is a left leaning 2-3 tree
+		 */
+		bool isLeftLeaning23tree(Node *p)const{
 			//NULL is a 2-3 tree
 			if( !p ) {
 				return true;
 			}
 			//right leaning
 			if( isRed(p->right) ){
+				std::cerr << "Oh, no it's a right leaning 2-3 tree" << std::endl;
 				return false;
 			}
 			if( p != root && isRed(p) && isRed(p->left) ){
+				std::cerr << "Oh, no it has 4-node " << std::endl;
 				return false;
 			}
 			return isLeftLeaning23tree(p->left) 
 				&& isLeftLeaning23tree(p->right);
 		}
-		bool isSizeConsistent(Node *p) {
+		/*	@brief check if subtree rooted at p
+		 *		is size consistent
+		 */
+		bool isSizeConsistent(Node *p)const {
 			if( !p ){
 				return true;
 			}
-			if( p->sz != 1 + size(p->left) + size(p->right) ){
+			if( p->sz != (1u + size(p->left) + size(p->right) ) ){
+				std::cerr << "size not consistent " << std::endl;
 				return false;
 			}
-
 			return isSizeConsistent(p->left)
 				&& isSizeConsistent(p->right);
 		}
-		bool isBST(Node *p){
+
+		/*	@brief check if subtree rooted at p is a balance search tree
+		 */
+		bool isBST(Node *p)const{
 			if( !p ) {
 				return true;
 			}
 			if( p->left ){
 				Node *max_p = max(p->left);
 				if( max_p && !( max_p->key < p->key ) ){
+					std::cerr << "it is not a balanced search tree" << std::endl;
 					return false;
 				}
 			}
-
 			if( p->right ){
 				Node *min_p = min(p->right);
 				if( min_p && !(min_p->key > p->key) ){
+					std::cerr << "it is not a balanced search tree" << std::endl;
 					return false;
 				}
 			}	
 			return isBST(p->left) && isBST(p->right);
 		}
-#endif
+
+		bool check_red_black_tree(Node *p)const{
+			return isBST(p) && isLeftLeaning23tree(p) 
+					&& 	isSizeConsistent(p);
+		}
+		/*	@brief deep copy a tree
+		 */
+		Node * deep_copy_tree(Node *p){
+			//p is null
+			if( !p ){
+				return NULL;
+			}
+			Node *x = new Node(p->key,p->value,p->color, p->sz);
+			x->left = deep_copy_tree(p->left);
+			x->right = deep_copy_tree(p->right);
+			return x;
+		}
+	
+		/*	@brief destroy this red black tree
+		 */
+		void destroy(){
+			while( root ){
+				removeMin();
+			}
+			root = NULL;
+		}
+
 	public:
+
+		/*	@brief 	default constructor
+		 *			construct an empty BST
+		 */
+		RBTree(): root(NULL) { }
 		
-#ifdef DEBUG_CHECK
-		bool isRankConsistent(){
-			for(unsigned i=0; i<size(); ++i){
+		/*	@brief copy constructor
+		 *		deep copy constructor
+		 */
+		RBTree(const RBTree &from){
+			root = deep_copy_tree(from.root);
+			check_red_black_tree(root);
+		}
+	
+		/*	@brief overload assignment operator
+		 *		deep copy
+		 */
+		RBTree & operator=(const RBTree &that){
+			if( this != &that ){
+				destroy();
+				root = deep_copy_tree(that);
+			}
+			check_red_black_tree(root);
+		}
+
+		/*	@brief 	destructor
+		 *			delete all nodes
+		 */
+		~RBTree(){
+			destroy();
+		}
+
+		/*	@brief check if a tree is rank consistent
+		 *		which means that rank( select(i) ) == i for all i = 0,1,...,size(p)-1
+		 */
+		bool isRankConsistent()const{
+			for(size_t i=0; i<size(); ++i){
 				if(i != rank( select(i) ) ){
 					return false;
 				}
 			}
 			return true;
 		}
-		bool isBalancedSearchTree(){
+		/*	@brief check if tree is a balanced search tree
+		 */
+		bool isBalancedSearchTree()const{
 			return isBST(root);
 		}
-		bool isSizeConsistent()	{
+		/*	@brief if red black tree is size consistent
+		 */
+		bool isSizeConsistent()	const{
 			return isSizeConsistent(root);
 		}
-		bool isLeftLeaning23tree(){
+		/*	@brief check if tree is left leaning 2-3 tree
+		 */
+		bool isLeftLeaning23tree()const{
 			return isLeftLeaning23tree(root);
 		}
-#endif
-		
 		
 		/*	@brief smallest key greater than or equal to k
 		 *	@param k 	key
 		 */
-		K ceiling(const K &k){
+		K ceiling(const K &k)const{
 			Node *p = ceiling(root, k);
 			if( !p ){
 				std::cerr << "no such key" << std::endl;
@@ -586,7 +719,7 @@ class RBTree{
 		/*	@brief largest key less than and equal to k
 		 *	@param k	key
 		 */
-		K floor(const K &k){
+		K floor(const K &k)const{
 			Node * p = floor(root, k);
 			if( !p ){
 				std::cerr << "no such key" << std::endl;
@@ -637,7 +770,6 @@ class RBTree{
 
 		}
 		
-
 		/*	@brief 	remove minimum key of BST
 		 *			if BST is empty, output an error message
 		 */
@@ -660,37 +792,42 @@ class RBTree{
 
 		/* 	@brief	return ordered keys in a queue
 		 */
-		std::deque<K> keys(){
-			std::deque<K> q;
-			keys(q, root);
-			return q;
+		std::vector<K> getAllKeys()const{
+			std::vector<K> vecKeys;
+			getAllKeys(root, vecKeys);
+			return vecKeys;
 		}
 		
 		/*	@brief return number of BST
 		 */
-		unsigned size(){
+		size_t size()const{
 			return size(root);
 		}
 
 		/*	@brief return k th key zero started
 		 */
-		K select(unsigned k){
+		K select(size_t k)const {
 			Node *p = select(root, k);
-			assert(p);
+			//assert(p);
+			if( !p ){
+				std::cerr<< "Index out of bounds" << std::endl;
+				std::cerr<< "key returned is not defined" << std::endl;
+				return K();
+			}
 			return p->key;
 		}
 
 		/*	@brief 	return number of keys less than k
 		 *	@param k, K type
 		 */
-		unsigned rank(const K &k) {
+		size_t rank(const K &k)const {
 			return rank(root, k);
 		}
 
 		/*	@brief 	return minimum key of BST
 		 *			if BST is empty, output an error message
 		 */
-		K min (){
+		K min ()const{
 			Node *p = min(root);
 			if( p == NULL ){
 				std::cerr<<"access empty BST error..."<<std::endl;
@@ -703,7 +840,7 @@ class RBTree{
 		/*	@brief 	return maximum key of BST
 		 *			if BST is empty, output an error message
 		 */
-		K max() {
+		K max()const {
 			Node *p = max(root);
 			if( p == NULL ){
 				std::cerr<<"access empty BST error..."<<std::endl;
@@ -715,11 +852,22 @@ class RBTree{
 
 		//insert k,v pair
 		/*	@brief	insert a k,v pair into BST
+		 *		if there exists k in tree then change value to v
 		 *	@param k 	key
 		 *	@param v	value
 		 */
 		void insert( const K &k, const V &v){
 			root = insert(root, k, v);	
+			root->color = BLACK;
+		}
+
+		/*	@brief change k's value to v 
+		 *		side effect: if k is not contained k, v pair will be inserted
+		 *	@param k	key 
+		 *	@param v	value
+		 */
+		void changeValue(const K &k, const V &v){
+			root = insert(root, k, v);
 			root->color = BLACK;
 		}
 
@@ -741,7 +889,7 @@ class RBTree{
 		 *			if k is not contained
 		 *				output an error message
 		 */
-		V get(const K &k){
+		V get(const K &k)const{
 			Node *p = get(root,k);
 			//assert( p );
 			if( !p ){
@@ -751,25 +899,35 @@ class RBTree{
 			}
 			return p->value;
 		}
+		
+		/*	@brief 	return value associated with key
+		 *			if k is not contained
+		 *			then insert k with a default value
+		 *	Note:	this is similiar with stl map[key] = value operation
+		 */
+		V& get(const K &k) {
+			Node *p = get(root,k);
+			if( !p ){
+				V v;
+				insert(k,v);
+				Node *x = get(root,k);
+				return x->value;
+			}
+			return p->value;
+		}
+
 
 		/*	@brief check if k is contained
 		 *
 		 */
-		bool contain(const K &k){
+		bool contain(const K &k)const{
 			return ( get(root,k) != NULL );
 		}
 		
-		/*	@brief 	default constructor
-		 *			construct an empty BST
+		/*	@brief destroy red black tree
 		 */
-		RBTree(): root(NULL) { }
-		/*	@brief 	destructor
-		 *			delete all nodes
-		 */
-		~RBTree(){
-			while( root ){
-				removeMin();
-			}
+		void clear() {
+			destroy();
 		}
 };
 
@@ -807,7 +965,7 @@ std::ostream& operator<<( std::ostream &os, const RBTNode<Tp1,Tp2> &node ){
 //inorder print nodes
 //four lines per node whose children are included
 template <typename K, typename V>
-std::ostream& operator<<( std::ostream &os, RBTree<K,V> &rbt){
+std::ostream& operator<<( std::ostream &os, const RBTree<K,V> &rbt){
 	os << "=========red black tree structure==============="<<std::endl;
 	RBTNode<K,V> *p = rbt.root;
 	if( !p ) {
@@ -819,8 +977,11 @@ std::ostream& operator<<( std::ostream &os, RBTree<K,V> &rbt){
 	return os;
 }
 
+/*	@brief in-order travers a tree
+ *	
+ */
 template <typename U, typename S>
-void traverse(std::ostream &os, RBTNode<U,S> *p){
+void traverse(std::ostream &os, const RBTNode<U,S> *p){
 	if( !p ){
 		return ;
 	}
@@ -829,5 +990,4 @@ void traverse(std::ostream &os, RBTNode<U,S> *p){
 	traverse(os, p->right);
 }
 #endif
-
 #endif
