@@ -21,6 +21,7 @@
 #include "array.h"
 #include <iostream>
 #include <vector>
+//#define DEBUG_TEST
 template <typename K> 
 class MinPQ{
 
@@ -30,7 +31,7 @@ class MinPQ{
 		//keys from index 1 to N (exclusive)
 		Array<K> keys;
 
-		//keys[1...N) are the keys
+		//keys[1...N] are the keys
 		size_t N;
 		
 		/*	@brief check keys are min heap
@@ -146,7 +147,7 @@ class MinPQ{
 		/*	@brief assignment operator
 		 */
 		MinPQ& operator=(const MinPQ &that){
-			if(this != that){
+			if(this != &that){
 				keys = that.keys;
 				N = that.N;
 			}
@@ -158,6 +159,8 @@ class MinPQ{
 		 */
 		void insert(const K &k){
 			//push
+			//it is a bug
+			//keys[++N] = k;
 			keys.push_back(k);
 			++N;
 			swim(N);
@@ -175,6 +178,11 @@ class MinPQ{
 			K minKey = keys[1];
 			swap(1, N--);
 			sink(1);
+#ifdef DEBUG_TEST
+
+			std::cout<<"keys are: " <<keys;
+#endif
+			//this is a bug.....
 			keys.pop_back();
 			return minKey;
 		}
@@ -287,6 +295,14 @@ template <typename K> class IndexMinPQ{
 
 	public:
 		
+//		IndexMinPQ(){
+//			int maxN = 1;
+//			NMAX = maxN;
+//			N = 0;
+//			keys = Array<K>(maxN + 1, K());
+//			pq = Array<int>(maxN + 1, -1);
+//			qp = Array<int>(maxN, -1);
+//		}
 		/*	@brief construct with maximum number index
 		 */
 		IndexMinPQ(int maxN){
@@ -360,6 +376,7 @@ template <typename K> class IndexMinPQ{
 			check_index(index);
 			if( contain(index) ){
 				changeKey(index,k);
+				return ;
 			}
 			++N;	
 			//put k into keys		

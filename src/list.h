@@ -101,25 +101,6 @@ template <typename U> class Iterator__Linked{
 		return tmp;
 	}
 
-	//			//move n items
-	//			//n can be any integer
-	//			//move forward when n is positive
-	//			//move backward when n i negative
-	//			//no move when n is 0
-	//			Iterator__Linked& advance(int n){
-	//				//move forward
-	//				if (n > 0){
-	//					while( cur->next && n-- > 0){
-	//						cur = cur->next;
-	//					}
-	//					
-	//				}else if( n < 0 ){
-	//				//move backward
-	//
-	//				}else{
-	//				//no move
-	//				}
-	//			}
 
 	U& next(){	
 		cur = cur->next;
@@ -149,10 +130,6 @@ template <typename T>  class List{
 
 	template <class U> friend std::ostream& operator<<(std::ostream&, const List<U>&);
 	//template <class Tp> friend class Iterator__Linked;
-
-	
-
-
 
 	private:
 

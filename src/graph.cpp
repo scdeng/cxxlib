@@ -210,3 +210,59 @@ CC::CC(const Graph &g){
 	}
 }
 
+
+
+//==================edge weighted graph=================//
+
+std::ostream& operator<<(std::ostream &os, const WeightEdge &e){
+	os<< "{" <<e.oneVertex()<<"-"<<
+		e.anotherVertex()<<", " << e.weight() << "}"<< std::endl;
+	return os;
+}
+
+std::ostream& operator<<(std::ostream &os, const EdgeWeightGraph &g){
+	os<<"---------------------------------"<<std::endl;
+	os<<g._V<<" vertices and " << g._E << " edges"<<std::endl;
+	for(int v=0; v<g._V; ++v){
+		os<<v<<":\t";
+		for(list<WeightEdge>::const_iterator it = g._adj[v].begin();
+					it != g._adj[v].end(); ++it){
+			os<<"[" << it->other(v) <<", "<<it->weight() << "] "; 
+		}
+		os<<std::endl;
+	}
+	os<<"--------------------------------"<<std::endl<<std::endl;
+	return os;
+}
+
+/*	@brief construct with input stream
+*/
+EdgeWeightGraph::EdgeWeightGraph(istream &is){
+	int V;
+	int E;
+	is >> V;
+	is >> E;
+	_V = V;
+	_E = 0;
+	_adj = vector<list<Edge> >(V);
+
+	int u;
+	int v;
+	double w;
+	while( is>>u && is>>v && is >> w ){
+		addEdge(Edge(u,v,w));	
+	}
+}
+/*	@brief add a weight edge
+*/
+void EdgeWeightGraph::addEdge(Edge e){
+	//get vertex
+	int u = e.oneVertex();
+	int v = e.anotherVertex();
+	//add vertex to adjacent list
+	_adj[u].push_back(e);
+	_adj[v].push_back(e);
+	//increase no. of edge
+	++_E;
+}
+

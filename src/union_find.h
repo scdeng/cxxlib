@@ -18,7 +18,7 @@
 
 #ifndef UNION_FIND_H
 #define UNION_FIND_H
-#define DEBUG_PRINTING
+//#define DEBUG_PRINTING
 #ifdef DEBUG_PRINTING
 #include <iostream>
 using namespace std;

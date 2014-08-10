@@ -1,0 +1,420 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ARRAY_H	array.h	20;"	d
+Array	array.h	/^		Array(): sz(0), cap(1), ptr(new T[1]){ }$/;"	f	class:Array
+Array	array.h	/^		Array(const Array &from){$/;"	f	class:Array
+Array	array.h	/^		Array(size_t size, const T &t) {$/;"	f	class:Array
+Array	array.h	/^template <typename T> class Array{$/;"	c
+BFSDirectedPaths	digraph.cpp	/^BFSDirectedPaths::BFSDirectedPaths(const Digraph &dg, const vector<int> &sources){$/;"	f	class:BFSDirectedPaths
+BFSDirectedPaths	digraph.cpp	/^BFSDirectedPaths::BFSDirectedPaths(const Digraph &dg, int s){$/;"	f	class:BFSDirectedPaths
+BFSDirectedPaths	digraph.h	/^class BFSDirectedPaths{$/;"	c
+BLACK	rbtree.h	/^const bool BLACK = false;$/;"	v
+BSTree	tree.h	/^		BSTree():root(NULL){}$/;"	f	class:BSTree
+BSTree	tree.h	/^template <typename K, typename V> class BSTree{$/;"	c
+BreadthFirstPaths	graph.h	/^		BreadthFirstPaths(const Graph &g, const vector<int> &sources){$/;"	f	class:BreadthFirstPaths
+BreadthFirstPaths	graph.h	/^		BreadthFirstPaths(const Graph &g, int s){$/;"	f	class:BreadthFirstPaths
+BreadthFirstPaths	graph.h	/^class BreadthFirstPaths{$/;"	c
+CC	Makefile	/^CC=g++$/;"	m
+CC	graph.cpp	/^CC::CC(const Graph &g){$/;"	f	class:CC
+CC	graph.h	/^class CC{$/;"	c
+CXXFLAGS	Makefile	/^CXXFLAGS = -Wall -g $/;"	m
+DEBUG_CHECK	rbtree.h	35;"	d
+DEBUG_MODE	list.h	23;"	d
+DEBUG_PRINT	graph.h	30;"	d
+DEBUG_PRINT	rbtree.h	37;"	d
+DEBUG_PRINTING	union_find.h	21;"	d
+DEBUG_TEST	rbtree.h	36;"	d
+DFSOrder	digraph.cpp	/^DFSOrder::DFSOrder(const Digraph &dg){$/;"	f	class:DFSOrder
+DFSOrder	digraph.h	/^class DFSOrder{$/;"	c
+DIGRAPH_H	digraph.h	20;"	d
+DepthFirstPaths	graph.h	/^		DepthFirstPaths(const Graph &g, int s){$/;"	f	class:DepthFirstPaths
+DepthFirstPaths	graph.h	/^class DepthFirstPaths{$/;"	c
+Digraph	digraph.cpp	/^Digraph::Digraph(const Digraph &G){$/;"	f	class:Digraph
+Digraph	digraph.cpp	/^Digraph::Digraph(istream &is){$/;"	f	class:Digraph
+Digraph	digraph.h	/^		Digraph(int N){$/;"	f	class:Digraph
+Digraph	digraph.h	/^class Digraph{$/;"	c
+DirectedCycle	digraph.cpp	/^DirectedCycle::DirectedCycle(const Digraph &dg){$/;"	f	class:DirectedCycle
+DirectedCycle	digraph.h	/^class DirectedCycle{$/;"	c
+DirectedDFS	digraph.cpp	/^DirectedDFS::DirectedDFS(const Digraph &dg, int s){$/;"	f	class:DirectedDFS
+DirectedDFS	digraph.h	/^class DirectedDFS{$/;"	c
+E	digraph.h	/^		int E() const {$/;"	f	class:Digraph
+E	graph.h	/^		int E() const { return _e; }$/;"	f	class:Graph
+GRAPH_H	graph.h	20;"	d
+Graph	graph.cpp	/^Graph::Graph(istream &is){$/;"	f	class:Graph
+Graph	graph.h	/^		Graph(): _v(0), _e(0), adj(vector<list<int> > () ){ }$/;"	f	class:Graph
+Graph	graph.h	/^		Graph(int N){$/;"	f	class:Graph
+Graph	graph.h	/^class Graph{$/;"	c
+Iterator__Linked	list.h	/^	Iterator__Linked(): cur(NULL) { }$/;"	f	class:Iterator__Linked
+Iterator__Linked	list.h	/^	Iterator__Linked(ListNode<U> *node){$/;"	f	class:Iterator__Linked
+Iterator__Linked	list.h	/^	Iterator__Linked(const Iterator__Linked &from){$/;"	f	class:Iterator__Linked
+Iterator__Linked	list.h	/^template <typename U> class Iterator__Linked{$/;"	c
+Iterator__Seq	array.h	/^	Iterator__Seq(): ptr(NULL), offset(0) { }$/;"	f	class:Iterator__Seq
+Iterator__Seq	array.h	/^	Iterator__Seq(U *_ptr, int _offset) : ptr(_ptr), offset(_offset) {}$/;"	f	class:Iterator__Seq
+Iterator__Seq	array.h	/^	Iterator__Seq(const Iterator__Seq &from){$/;"	f	class:Iterator__Seq
+Iterator__Seq	array.h	/^template <typename U> class Iterator__Seq{$/;"	c
+LIST_H	list.h	20;"	d
+List	list.h	/^	List( const List &from){$/;"	f	class:List
+List	list.h	/^	List(){$/;"	f	class:List
+List	list.h	/^template <typename T>  class List{$/;"	c
+ListNode	list.h	/^	ListNode(const T &t):data(t),prev(NULL),next(NULL){}$/;"	f	struct:ListNode
+ListNode	list.h	/^template <typename T> struct ListNode{$/;"	s
+MAP_H	map.h	20;"	d
+MST_H	mst.h	20;"	d
+Map	map.h	/^		Map():rbt(Tree()) { }$/;"	f	class:Map
+Map	map.h	/^		Map(const Map &from):rbt(from.rbt) {}$/;"	f	class:Map
+Map	map.h	/^class Map{$/;"	c
+NON_ITERATOR	list.h	24;"	d
+NUM_OF_DELETION	rbtree.h	/^	static unsigned long NUM_OF_DELETION = 0;$/;"	v
+NUM_OF_INSERTION	rbtree.h	/^	static unsigned long NUM_OF_INSERTION = 0;$/;"	v
+NUM_OF_LEFT_ROTATION	rbtree.h	/^	static unsigned long NUM_OF_LEFT_ROTATION = 0;$/;"	v
+NUM_OF_RIGHT_ROTATION	rbtree.h	/^	static unsigned long NUM_OF_RIGHT_ROTATION = 0;$/;"	v
+Node	rbtree.h	/^	typedef RBTNode<K,V> Node;$/;"	t	class:RBTree
+OBJS	Makefile	/^OBJS = $(patsubst %.cpp, %.o,$(SOUCE_FILES))$/;"	m
+PRG	Makefile	/^PRG=jet$/;"	m
+QUEUE_H	queue.h	20;"	d
+Queue	queue.h	/^		Queue():data(List<T>()) {}$/;"	f	class:Queue
+Queue	queue.h	/^template <typename T> class Queue{$/;"	c
+RBTNode	rbtree.h	/^		RBTNode(const K &k, const V &v, bool c, int s):$/;"	f	class:RBTNode
+RBTNode	rbtree.h	/^template <typename K, typename V> class RBTNode{$/;"	c
+RBTREE_H	rbtree.h	28;"	d
+RBTree	rbtree.h	/^		RBTree(): root(NULL) { }$/;"	f	class:RBTree
+RBTree	rbtree.h	/^		RBTree(const RBTree &from){$/;"	f	class:RBTree
+RBTree	rbtree.h	/^class RBTree{$/;"	c
+RED	rbtree.h	/^const bool RED = true;$/;"	v
+SCC	digraph.cpp	/^SCC::SCC(const Digraph &dg){$/;"	f	class:SCC
+SCC	digraph.h	/^class SCC{$/;"	c
+SOUCE_FILES	Makefile	/^SOUCE_FILES = $(wildcard *.cpp)$/;"	m
+STACK_H	stack.h	20;"	d
+Stack	stack.h	/^		Stack(): data( List<T>() ) { }$/;"	f	class:Stack
+Stack	stack.h	/^template <typename T> class Stack{$/;"	c
+TREE_H	tree.h	20;"	d
+TopologicalSort	digraph.h	/^		TopologicalSort(const Digraph &dg){$/;"	f	class:TopologicalSort
+TopologicalSort	digraph.h	/^class TopologicalSort{$/;"	c
+Tree	map.h	/^		typedef RBTree<K,V> Tree;$/;"	t	class:Map
+TreeNode	tree.h	/^		TreeNode(): key(KEY()), value(VALUE()), sz(1), left(NULL), right(NULL) {}$/;"	f	struct:TreeNode
+TreeNode	tree.h	/^		TreeNode(const KEY &k, const VALUE &v ): $/;"	f	struct:TreeNode
+TreeNode	tree.h	/^template <typename KEY, typename VALUE> struct TreeNode{$/;"	s
+UF	union_find.h	/^		UF(int N){$/;"	f	class:UF
+UF	union_find.h	/^class UF{$/;"	c
+UNION_FIND_H	union_find.h	20;"	d
+V	digraph.h	/^		int V() const {$/;"	f	class:Digraph
+V	graph.h	/^		int V() const { return _v; }$/;"	f	class:Graph
+__E	digraph.h	/^		int __E;$/;"	m	class:Digraph
+__V	digraph.h	/^		int __V;$/;"	m	class:Digraph
+__adj	digraph.h	/^		vector<list<int> > __adj;$/;"	m	class:Digraph
+__count	digraph.h	/^		int __count;$/;"	m	class:SCC
+__count	graph.h	/^		int __count;$/;"	m	class:CC
+__count	graph.h	/^		int __count;$/;"	m	class:DepthFirstPaths
+__erase__	array.h	/^		void __erase__(size_t idx){$/;"	f	class:Array
+__id	digraph.h	/^		vector<int> __id;$/;"	m	class:SCC
+__id	graph.h	/^		vector<int> __id;$/;"	m	class:CC
+__insert__	array.h	/^		void __insert__(size_t idx, const T &t){$/;"	f	class:Array
+__preOrder	digraph.h	/^		deque<int> __preOrder;$/;"	m	class:DFSOrder
+__reverseOrder	digraph.h	/^		deque<int> __reverseOrder;$/;"	m	class:DFSOrder
+__s	digraph.h	/^		int __s;$/;"	m	class:DirectedDFS
+__s	graph.h	/^		int __s;$/;"	m	class:DepthFirstPaths
+__vertexCallOrder	digraph.h	/^		deque<int> __vertexCallOrder;$/;"	m	class:DFSOrder
+_e	graph.h	/^		int _e;$/;"	m	class:Graph
+_v	graph.h	/^		int _v;$/;"	m	class:Graph
+addEdge	digraph.h	/^		void addEdge(int u, int v){$/;"	f	class:Digraph
+addEdge	graph.h	/^		void addEdge(int u, int v){$/;"	f	class:Graph
+adj	digraph.h	/^		const list<int>& adj(int v)const{$/;"	f	class:Digraph
+adj	graph.h	/^		vector<list<int> > adj;		$/;"	m	class:Graph
+adjacent	graph.h	/^		const list<int>& adjacent(int v)const{$/;"	f	class:Graph
+assert_list	list.h	/^template <class U>  bool assert_list(const List<U> &list){$/;"	f
+back	list.h	/^	T back()const {$/;"	f	class:List
+back	list.h	/^	T& back(){$/;"	f	class:List
+back	queue.h	/^		T& back() {$/;"	f	class:Queue
+balance	rbtree.h	/^		Node* balance(Node *p){$/;"	f	class:RBTree
+begin	array.h	/^		iterator begin() const {$/;"	f	class:Array
+begin	list.h	/^	iterator begin(){$/;"	f	class:List
+begin	queue.h	/^		iterator begin(){$/;"	f	class:Queue
+begin	stack.h	/^		iterator begin() {$/;"	f	class:Stack
+bfs	digraph.cpp	/^void BFSDirectedPaths::bfs(const Digraph &g, const vector<int> &sources){$/;"	f	class:BFSDirectedPaths
+bfs	digraph.cpp	/^void BFSDirectedPaths::bfs(const Digraph &g, int v){$/;"	f	class:BFSDirectedPaths
+bfs	graph.cpp	/^void BreadthFirstPaths::bfs(const Graph &g, const vector<int> &sources){$/;"	f	class:BreadthFirstPaths
+bfs	graph.cpp	/^void BreadthFirstPaths::bfs(const Graph &g, int s){$/;"	f	class:BreadthFirstPaths
+cap	array.h	/^		size_t cap;$/;"	m	class:Array
+capacity	array.h	/^		size_t capacity()const{$/;"	f	class:Array
+ceiling	rbtree.h	/^		K ceiling(const K &k){$/;"	f	class:RBTree
+ceiling	rbtree.h	/^		Node * ceiling(Node *p, const K &k){$/;"	f	class:RBTree
+changeValue	rbtree.h	/^		void changeValue(const K &k, const V &v){$/;"	f	class:RBTree
+change_head	queue.h	/^		void change_head(const T &t){$/;"	f	class:Queue
+checkBST	tree.h	/^		bool checkBST(TreeNode<K,V> *p){$/;"	f	class:BSTree
+check_UF	union_find.h	/^bool check_UF( const UF &uf){$/;"	f
+check_index	array.h	/^		void check_index(size_t i) const {$/;"	f	class:Array
+check_red_black_tree	rbtree.h	/^		bool check_red_black_tree(Node *p){$/;"	f	class:RBTree
+check_vertex	graph.cpp	/^bool Graph::check_vertex(int v)const{$/;"	f	class:Graph
+clear	array.h	/^		void clear(){$/;"	f	class:Array
+clear	list.h	/^	void clear(){$/;"	f	class:List
+clear	queue.h	/^		void clear(){$/;"	f	class:Queue
+color	rbtree.h	/^		bool color;$/;"	m	class:RBTNode
+components	digraph.h	/^		vector<deque<int> > components() const{$/;"	f	class:SCC
+connect	union_find.h	/^		void connect(int u, int v){$/;"	f	class:UF
+connected	graph.h	/^		bool connected(int u, int v)const{$/;"	f	class:CC
+connected	graph.h	/^		bool connected(int v)const{$/;"	f	class:DepthFirstPaths
+contain	rbtree.h	/^		bool contain(const K &k){$/;"	f	class:RBTree
+contain	tree.h	/^		bool contain(const K &k){$/;"	f	class:BSTree
+copy_list	list.h	/^	void copy_list(const List &from){	$/;"	f	class:List
+count	graph.h	/^		int count()const{$/;"	f	class:CC
+count	graph.h	/^		int count()const{$/;"	f	class:DepthFirstPaths
+count	union_find.h	/^		int count;$/;"	m	class:UF
+create_rbt	test_rbt.cpp	/^void create_rbt(RBTree<int, string> &rb){$/;"	f
+cur	list.h	/^	ListNode<U> *cur;$/;"	m	class:Iterator__Linked
+cyc	digraph.h	/^		deque<int> cyc;$/;"	m	class:DirectedCycle
+cycle	digraph.h	/^		deque<int> cycle() const {$/;"	f	class:DirectedCycle
+dag	digraph.h	/^		bool dag;$/;"	m	class:TopologicalSort
+data	list.h	/^	T data;$/;"	m	struct:ListNode
+data	queue.h	/^		List<T> data;$/;"	m	class:Queue
+data	stack.h	/^		List<T> data;$/;"	m	class:Stack
+deep_copy_tree	rbtree.h	/^		Node * deep_copy_tree(Node *p){$/;"	f	class:RBTree
+delete_rbt	test_rbt.cpp	/^void delete_rbt(){$/;"	f
+dequeue	queue.h	/^		void dequeue(){$/;"	f	class:Queue
+destroy	list.h	/^	void destroy(){$/;"	f	class:List
+destroy	rbtree.h	/^		void destroy(){$/;"	f	class:RBTree
+dfs	digraph.cpp	/^void DFSOrder::dfs(const Digraph &dg, int v){$/;"	f	class:DFSOrder
+dfs	digraph.cpp	/^void DirectedCycle::dfs(const Digraph &dg, int v){$/;"	f	class:DirectedCycle
+dfs	digraph.cpp	/^void DirectedDFS::dfs(const Digraph &dg, int v){$/;"	f	class:DirectedDFS
+dfs	digraph.cpp	/^void SCC::dfs(const Digraph &dg, int v){$/;"	f	class:SCC
+dfs	graph.cpp	/^void CC::dfs(const Graph &g, int v){$/;"	f	class:CC
+dfs	graph.cpp	/^void DepthFirstPaths::dfs(const Graph &g, int v){$/;"	f	class:DepthFirstPaths
+distTo	digraph.h	/^		vector<int> distTo;$/;"	m	class:BFSDirectedPaths
+distTo	graph.h	/^		vector<int> distTo;$/;"	m	class:BreadthFirstPaths
+distanceTo	graph.h	/^		int distanceTo(int v)const{$/;"	f	class:BreadthFirstPaths
+edgeTo	digraph.h	/^		vector<int> edgeTo;$/;"	m	class:BFSDirectedPaths
+edgeTo	digraph.h	/^		vector<int> edgeTo;$/;"	m	class:DirectedCycle
+edgeTo	digraph.h	/^		vector<int> edgeTo;$/;"	m	class:DirectedDFS
+edgeTo	graph.h	/^		vector<int> edgeTo;$/;"	m	class:BreadthFirstPaths
+edgeTo	graph.h	/^		vector<int> edgeTo;$/;"	m	class:DepthFirstPaths
+empty	array.h	/^		bool empty() const {$/;"	f	class:Array
+empty	list.h	/^	bool empty() const { return sz == 0; }$/;"	f	class:List
+empty	queue.h	/^		bool empty(){$/;"	f	class:Queue
+empty	rbtree.h	/^		bool empty()const {$/;"	f	class:RBTree
+empty	stack.h	/^		bool empty(){$/;"	f	class:Stack
+empty	tree.h	/^		bool empty()const {$/;"	f	class:BSTree
+end	array.h	/^		iterator end() const {$/;"	f	class:Array
+end	list.h	/^	iterator end(){$/;"	f	class:List
+end	queue.h	/^		iterator end(){$/;"	f	class:Queue
+end	stack.h	/^		iterator end(){$/;"	f	class:Stack
+enqueue	queue.h	/^		void enqueue(const T &t){$/;"	f	class:Queue
+erase	array.h	/^		void erase(iterator pos){$/;"	f	class:Array
+erase	array.h	/^		void erase(size_t idx){$/;"	f	class:Array
+find	tree.h	/^		V find(const K &k){$/;"	f	class:BSTree
+find	union_find.h	/^		int find(int u){$/;"	f	class:UF
+find_node	tree.h	/^		TreeNode<K,V> * find_node(TreeNode<K,V> *p, const K &k){$/;"	f	class:BSTree
+flipColors	rbtree.h	/^		void flipColors(Node *p){$/;"	f	class:RBTree
+floor	rbtree.h	/^		K floor(const K &k){$/;"	f	class:RBTree
+floor	rbtree.h	/^		Node * floor(Node *p, const K &k){$/;"	f	class:RBTree
+front	list.h	/^	T front() const {$/;"	f	class:List
+front	list.h	/^	T& front(){$/;"	f	class:List
+front	queue.h	/^		T front() const {$/;"	f	class:Queue
+front	queue.h	/^		T& front() {$/;"	f	class:Queue
+get	rbtree.h	/^		Node * get(Node *p, const K &k){$/;"	f	class:RBTree
+get	rbtree.h	/^		V get(const K &k){$/;"	f	class:RBTree
+get_least_power_2	array.h	/^		size_t get_least_power_2(size_t n){$/;"	f	class:Array
+hasCycle	digraph.h	/^		bool hasCycle(){$/;"	f	class:DirectedCycle
+hasNext	list.h	/^	bool hasNext()const{$/;"	f	class:Iterator__Linked
+hasPathTo	graph.h	/^		bool hasPathTo(int v)const{$/;"	f	class:BreadthFirstPaths
+hasPathTo	graph.h	/^		bool hasPathTo(int v)const{$/;"	f	class:DepthFirstPaths
+head	list.h	/^	ListNode<T> *head;$/;"	m	class:List
+height	rbtree.h	/^		int height() const {$/;"	f	class:RBTree
+height	rbtree.h	/^		int height(const Node *p)const{$/;"	f	class:RBTree
+height	tree.h	/^		int height(){$/;"	f	class:BSTree
+height	tree.h	/^		int height(TreeNode<K,V> *p){$/;"	f	class:BSTree
+id	graph.h	/^		int id(int v)const {$/;"	f	class:CC
+inorder	tree.h	/^		void inorder(){$/;"	f	class:BSTree
+inorder	tree.h	/^		void inorder(TreeNode<K,V> *p){$/;"	f	class:BSTree
+insert	array.h	/^		void insert(iterator pos, const T &t){$/;"	f	class:Array
+insert	array.h	/^		void insert(size_t idx, const T &t){$/;"	f	class:Array
+insert	list.h	/^	void insert( iterator pos, InputIter beg, InputIter end){$/;"	f	class:List
+insert	list.h	/^	void insert( iterator pos, const T &t){$/;"	f	class:List
+insert	list.h	/^	void insert(iterator pos, int n, const T &t){$/;"	f	class:List
+insert	rbtree.h	/^		Node *insert(Node *p, const K &k, const V &v){$/;"	f	class:RBTree
+insert	rbtree.h	/^		void insert( const K &k, const V &v){$/;"	f	class:RBTree
+insert	tree.h	/^		TreeNode<K,V> *insert(TreeNode<K,V> *p, const K &k, const V &v){$/;"	f	class:BSTree
+insert	tree.h	/^		void insert(const K &k, const V &v){$/;"	f	class:BSTree
+insert_after	list.h	/^	void insert_after(ListNode<T> *p, ListNode<T> *node){$/;"	f	class:List
+insert_before	list.h	/^	void insert_before(ListNode<T> *p, ListNode<T> *node){$/;"	f	class:List
+invokeOrder	digraph.h	/^		deque<int> invokeOrder() const {$/;"	f	class:DFSOrder
+isBST	rbtree.h	/^		bool isBST(Node *p){$/;"	f	class:RBTree
+isBalancedSearchTree	rbtree.h	/^		bool isBalancedSearchTree(){$/;"	f	class:RBTree
+isConnected	union_find.h	/^		bool isConnected(int u, int v){$/;"	f	class:UF
+isDAG	digraph.h	/^		bool isDAG() const {$/;"	f	class:TopologicalSort
+isLeftLeaning23tree	rbtree.h	/^		bool isLeftLeaning23tree(){$/;"	f	class:RBTree
+isLeftLeaning23tree	rbtree.h	/^		bool isLeftLeaning23tree(Node *p){$/;"	f	class:RBTree
+isRankConsistent	rbtree.h	/^		bool isRankConsistent(){$/;"	f	class:RBTree
+isRed	rbtree.h	/^		bool isRed(Node *p){$/;"	f	class:RBTree
+isSizeConsistent	rbtree.h	/^		bool isSizeConsistent()	{$/;"	f	class:RBTree
+isSizeConsistent	rbtree.h	/^		bool isSizeConsistent(Node *p) {$/;"	f	class:RBTree
+isValidIndex	map.h	/^		bool isValidIndex(int i){$/;"	f	class:Map
+isValidVertex	digraph.h	/^		bool isValidVertex(int v) const {$/;"	f	class:SCC
+isValidVertex	digraph.h	/^		bool isValidVertex(int v)const{$/;"	f	class:BFSDirectedPaths
+isValidVertex	digraph.h	/^		bool isValidVertex(int v)const{$/;"	f	class:Digraph
+iterator	array.h	/^		typedef Iterator__Seq<T> iterator;$/;"	t	class:Array
+iterator	list.h	/^	typedef Iterator__Linked<T> iterator;$/;"	t	class:List
+iterator	queue.h	/^		typedef Iterator__Linked<T> iterator;$/;"	t	class:Queue
+iterator	stack.h	/^		typedef Iterator__Linked<T> iterator;$/;"	t	class:Stack
+key	rbtree.h	/^		K key;$/;"	m	class:RBTNode
+key	tree.h	/^		KEY key;$/;"	m	struct:TreeNode
+keys	rbtree.h	/^		std::deque<K> keys(){$/;"	f	class:RBTree
+keys	rbtree.h	/^		void keys(std::deque<K> &q, Node *p){$/;"	f	class:RBTree
+keys	tree.h	/^		Queue<K> keys(){$/;"	f	class:BSTree
+keys	tree.h	/^		void keys(Queue<K> &q, TreeNode<K,V> *p){$/;"	f	class:BSTree
+left	rbtree.h	/^		RBTNode *left;$/;"	m	class:RBTNode
+left	tree.h	/^		TreeNode *left;$/;"	m	struct:TreeNode
+leftRotate	rbtree.h	/^		Node* leftRotate(Node *p){$/;"	f	class:RBTree
+main	main.cpp	/^int main(int argc, char **argv){$/;"	f
+marked	digraph.h	/^		vector<bool> marked;$/;"	m	class:BFSDirectedPaths
+marked	digraph.h	/^		vector<bool> marked;$/;"	m	class:DFSOrder
+marked	digraph.h	/^		vector<bool> marked;$/;"	m	class:DirectedCycle
+marked	digraph.h	/^		vector<bool> marked;$/;"	m	class:DirectedDFS
+marked	digraph.h	/^		vector<bool> marked;$/;"	m	class:SCC
+marked	graph.h	/^		vector<bool> marked;$/;"	m	class:BreadthFirstPaths
+marked	graph.h	/^		vector<bool> marked;$/;"	m	class:CC
+marked	graph.h	/^		vector<bool> marked;$/;"	m	class:DepthFirstPaths
+max	rbtree.h	/^		K max() {$/;"	f	class:RBTree
+max	rbtree.h	/^		Node* max(Node *p){$/;"	f	class:RBTree
+max	rbtree.h	/^		int max(int a, int b)const{$/;"	f	class:RBTree
+max	tree.h	/^		K max(){$/;"	f	class:BSTree
+max	tree.h	/^		TreeNode<K,V> * max(TreeNode<K,V> *p){$/;"	f	class:BSTree
+maximum	rbtree.h	42;"	d
+maximum	tree.h	/^T maximum(const T &one, const T &another){$/;"	f
+min	rbtree.h	/^		K min (){$/;"	f	class:RBTree
+min	rbtree.h	/^		Node* min(Node *p){$/;"	f	class:RBTree
+min	tree.h	/^		K min(){$/;"	f	class:BSTree
+min	tree.h	/^		TreeNode<K,V> * min(TreeNode<K,V> *p){$/;"	f	class:BSTree
+moveRedLeft	rbtree.h	/^		Node* moveRedLeft(Node *p) {$/;"	f	class:RBTree
+moveRedRight	rbtree.h	/^		Node* moveRedRight(Node *p){$/;"	f	class:RBTree
+next	list.h	/^	ListNode<T> *next;$/;"	m	struct:ListNode
+next	list.h	/^	U& next(){	$/;"	f	class:Iterator__Linked
+numOfComponents	digraph.h	/^		int numOfComponents() const {$/;"	f	class:SCC
+offset	array.h	/^		unsigned offset;$/;"	m	class:Iterator__Seq
+onStack	digraph.h	/^		vector<bool> onStack;$/;"	m	class:DirectedCycle
+operator !=	array.h	/^	bool operator!=(const Iterator__Seq &that) const {$/;"	f	class:Iterator__Seq
+operator !=	list.h	/^	bool operator!=(const Iterator__Linked &that) const {$/;"	f	class:Iterator__Linked
+operator *	array.h	/^	U& operator*() const {$/;"	f	class:Iterator__Seq
+operator *	list.h	/^	U& operator*() const {$/;"	f	class:Iterator__Linked
+operator +	array.h	/^	Iterator__Seq& operator+(int n){$/;"	f	class:Iterator__Seq
+operator ++	array.h	/^	Iterator__Seq operator++(int){$/;"	f	class:Iterator__Seq
+operator ++	array.h	/^	Iterator__Seq& operator++(){$/;"	f	class:Iterator__Seq
+operator ++	list.h	/^	Iterator__Linked operator++(int){$/;"	f	class:Iterator__Linked
+operator ++	list.h	/^	Iterator__Linked& operator++(){$/;"	f	class:Iterator__Linked
+operator --	array.h	/^	Iterator__Seq operator--(int){$/;"	f	class:Iterator__Seq
+operator --	array.h	/^	Iterator__Seq& operator--(){$/;"	f	class:Iterator__Seq
+operator --	list.h	/^	Iterator__Linked operator--(int){$/;"	f	class:Iterator__Linked
+operator --	list.h	/^	Iterator__Linked& operator--(){$/;"	f	class:Iterator__Linked
+operator ->	array.h	/^	U * operator->() const {$/;"	f	class:Iterator__Seq
+operator ->	list.h	/^	U * operator->() const {$/;"	f	class:Iterator__Linked
+operator <<	array.h	/^template <class T> std::ostream & operator<<(std::ostream &os, const Array<T> &a){$/;"	f
+operator <<	digraph.cpp	/^std::ostream& operator<<(std::ostream &os, const Digraph &dg){$/;"	f
+operator <<	graph.cpp	/^ostream& operator<<( ostream &os, DepthFirstPaths &dfs){$/;"	f
+operator <<	graph.cpp	/^ostream& operator<<(ostream &os, BreadthFirstPaths &bfs){$/;"	f
+operator <<	graph.cpp	/^ostream& operator<<(ostream &os, Graph &g){$/;"	f
+operator <<	list.h	/^template <class U> std::ostream& operator<<(std::ostream &os, const List<U> &list){$/;"	f
+operator <<	queue.h	/^std::ostream& operator<<(std::ostream &os, const Queue<Tp> &q){$/;"	f
+operator <<	rbtree.h	/^std::ostream& operator<<( std::ostream &os, RBTree<K,V> &rbt){$/;"	f
+operator <<	rbtree.h	/^std::ostream& operator<<( std::ostream &os, const RBTNode<Tp1,Tp2> &node ){$/;"	f
+operator <<	stack.h	/^std::ostream & operator<<( std::ostream& os, const Stack<Tp> &stack){$/;"	f
+operator =	array.h	/^		Array& operator=( const Array &that){$/;"	f	class:Array
+operator =	array.h	/^	Iterator__Seq& operator=(const Iterator__Seq &that){$/;"	f	class:Iterator__Seq
+operator =	list.h	/^	Iterator__Linked& operator=(const Iterator__Linked &that){$/;"	f	class:Iterator__Linked
+operator =	list.h	/^	List& operator=(const List &that){$/;"	f	class:List
+operator =	map.h	/^		Map& operator=(const Map &that){$/;"	f	class:Map
+operator =	rbtree.h	/^		RBTree & operator=(const RBTree &that){$/;"	f	class:RBTree
+operator ==	array.h	/^	bool operator==(const Iterator__Seq &that) const {$/;"	f	class:Iterator__Seq
+operator ==	list.h	/^	bool operator==(const Iterator__Linked &that) const {$/;"	f	class:Iterator__Linked
+operator []	array.h	/^		T& operator[](size_t i)$/;"	f	class:Array
+operator []	array.h	/^		const T& operator[](size_t i)const $/;"	f	class:Array
+operator []	map.h	/^		K operator[](int i) const {$/;"	f	class:Map
+operator []	map.h	/^		K& operator[](int i) {$/;"	f	class:Map
+parent	union_find.h	/^		Array<int> parent;$/;"	m	class:UF
+pathTo	digraph.cpp	/^deque<int> BFSDirectedPaths::pathTo(int v){$/;"	f	class:BFSDirectedPaths
+pathTo	digraph.cpp	/^deque<int> DirectedDFS::pathTo(int v){$/;"	f	class:DirectedDFS
+pathTo	graph.cpp	/^deque<int> BreadthFirstPaths::pathTo(int v)const{$/;"	f	class:BreadthFirstPaths
+pathTo	graph.cpp	/^deque<int> DepthFirstPaths::pathTo(int v)const{$/;"	f	class:DepthFirstPaths
+pop	stack.h	/^		void pop(){$/;"	f	class:Stack
+pop_back	array.h	/^		T pop_back(){$/;"	f	class:Array
+pop_back	list.h	/^	bool pop_back(){$/;"	f	class:List
+pop_front	list.h	/^	bool pop_front(){$/;"	f	class:List
+pop_node	list.h	/^	void pop_node(ListNode<T> *p){$/;"	f	class:List
+preOrder	digraph.h	/^		deque<int> preOrder() const {$/;"	f	class:DFSOrder
+prev	list.h	/^	ListNode<T> *prev;$/;"	m	struct:ListNode
+printBST	test_rbt.cpp	/^void printBST(RBTree<char,int> &rb){$/;"	f
+ptr	array.h	/^		T * ptr;$/;"	m	class:Array
+ptr	array.h	/^		U *ptr;$/;"	m	class:Iterator__Seq
+push	stack.h	/^		void push(const T &t){$/;"	f	class:Stack
+push_back	array.h	/^		void push_back(const T &t){$/;"	f	class:Array
+push_back	list.h	/^	void push_back( const T &t){$/;"	f	class:List
+push_front	list.h	/^	void push_front(const T &t){$/;"	f	class:List
+rank	rbtree.h	/^		unsigned rank(Node *p, const K &k){$/;"	f	class:RBTree
+rank	rbtree.h	/^		unsigned rank(const K &k) {$/;"	f	class:RBTree
+rank	tree.h	/^		int rank(const K &k){$/;"	f	class:BSTree
+rank	tree.h	/^		unsigned rank(TreeNode<K,V> *p, const K &k){$/;"	f	class:BSTree
+rbt	map.h	/^		Tree rbt;$/;"	m	class:Map
+reachable	digraph.cpp	/^bool BFSDirectedPaths::reachable(int v) const {$/;"	f	class:BFSDirectedPaths
+reachable	digraph.h	/^		bool reachable(int v) const {$/;"	f	class:DirectedDFS
+rear	queue.h	/^		T rear()const{$/;"	f	class:Queue
+remove	list.h	/^	bool remove(ListNode<T> *node){$/;"	f	class:List
+remove	list.h	/^	iterator remove(iterator beg, iterator end){$/;"	f	class:List
+remove	list.h	/^	iterator remove(iterator pos){$/;"	f	class:List
+remove	rbtree.h	/^		Node* remove(Node *p, const K &k){$/;"	f	class:RBTree
+remove	rbtree.h	/^		void remove(const K &k){$/;"	f	class:RBTree
+remove	tree.h	/^		TreeNode<K,V> * remove(TreeNode<K,V> *p, const K &k){$/;"	f	class:BSTree
+remove	tree.h	/^		void remove(const K &k){$/;"	f	class:BSTree
+removeMax	rbtree.h	/^		Node * removeMax(Node *p){$/;"	f	class:RBTree
+removeMax	rbtree.h	/^		void removeMax(){$/;"	f	class:RBTree
+removeMax	tree.h	/^		TreeNode<K,V> * removeMax(TreeNode<K,V> *p){$/;"	f	class:BSTree
+removeMax	tree.h	/^		void removeMax(){$/;"	f	class:BSTree
+removeMin	rbtree.h	/^		Node * removeMin(Node *p){$/;"	f	class:RBTree
+removeMin	rbtree.h	/^		void removeMin(){$/;"	f	class:RBTree
+removeMin	tree.h	/^		TreeNode<K,V> * removeMin(TreeNode<K,V> *p){$/;"	f	class:BSTree
+removeMin	tree.h	/^		void removeMin(){$/;"	f	class:BSTree
+reverse	digraph.cpp	/^Digraph Digraph::reverse()const{$/;"	f	class:Digraph
+reverseOrder	digraph.h	/^		deque<int> reverseOrder() const {$/;"	f	class:DFSOrder
+right	rbtree.h	/^		RBTNode *right;$/;"	m	class:RBTNode
+right	tree.h	/^		TreeNode *right;$/;"	m	struct:TreeNode
+rightRotate	rbtree.h	/^		Node* rightRotate(Node *p){$/;"	f	class:RBTree
+root	rbtree.h	/^		Node *root;$/;"	m	class:RBTree
+root	tree.h	/^		TreeNode<K,V> *root;$/;"	m	class:BSTree
+select	rbtree.h	/^		K select(unsigned k){$/;"	f	class:RBTree
+select	rbtree.h	/^		Node * select(Node *p, unsigned k){$/;"	f	class:RBTree
+select	tree.h	/^		K select(unsigned k){$/;"	f	class:BSTree
+select	tree.h	/^		TreeNode<K,V> * select(TreeNode<K,V> *p, unsigned k){$/;"	f	class:BSTree
+size	array.h	/^		size_t size()const{$/;"	f	class:Array
+size	graph.h	/^		int size(int v)const{$/;"	f	class:CC
+size	list.h	/^	size_t size() const {return sz;}$/;"	f	class:List
+size	queue.h	/^		size_t size(){$/;"	f	class:Queue
+size	rbtree.h	/^		int size(Node *p){$/;"	f	class:RBTree
+size	rbtree.h	/^		unsigned size(){$/;"	f	class:RBTree
+size	stack.h	/^		size_t size(){$/;"	f	class:Stack
+size	tree.h	/^		size_t size() const {$/;"	f	class:BSTree
+size	tree.h	/^		size_t size(TreeNode<K,V> *p){$/;"	f	class:BSTree
+stronglyConnected	digraph.h	/^		bool stronglyConnected(int u, int v){$/;"	f	class:SCC
+swap	array.h	/^		void swap(iterator one, iterator another){$/;"	f	class:Array
+swap	list.h	/^	void swap(iterator one, iterator another){$/;"	f	class:List
+sz	array.h	/^		size_t sz;$/;"	m	class:Array
+sz	graph.h	/^		vector<int> sz;$/;"	m	class:CC
+sz	list.h	/^	size_t sz;$/;"	m	class:List
+sz	rbtree.h	/^		int sz;$/;"	m	class:RBTNode
+sz	tree.h	/^		size_t sz;$/;"	m	struct:TreeNode
+sz	union_find.h	/^		Array<int> sz;$/;"	m	class:UF
+tail	list.h	/^	ListNode<T> *tail;$/;"	m	class:List
+test_insert	test_rbt.cpp	/^void test_insert(){$/;"	f
+test_rbt	test_rbt.cpp	/^void test_rbt(){$/;"	f
+test_rbtree	test_rbt.cpp	/^void test_rbtree(){$/;"	f
+top	stack.h	/^		T top() const {$/;"	f	class:Stack
+top	stack.h	/^		T& top() {$/;"	f	class:Stack
+topOrder	digraph.h	/^		deque<int> topOrder;$/;"	m	class:TopologicalSort
+topologicalOrder	digraph.h	/^		deque<int> topologicalOrder() const {$/;"	f	class:TopologicalSort
+traverse	rbtree.h	/^void traverse(std::ostream &os, RBTNode<U,S> *p){$/;"	f
+traverse	tree.h	/^void traverse(TreeNode<K,V> *p){$/;"	f
+value	rbtree.h	/^		V value;$/;"	m	class:RBTNode
+value	tree.h	/^		VALUE value;$/;"	m	struct:TreeNode
+~Array	array.h	/^		~Array(){$/;"	f	class:Array
+~BSTree	tree.h	/^		~BSTree(){$/;"	f	class:BSTree
+~List	list.h	/^	~List(){$/;"	f	class:List
+~RBTree	rbtree.h	/^		~RBTree(){$/;"	f	class:RBTree

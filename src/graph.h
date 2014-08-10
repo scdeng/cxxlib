@@ -25,6 +25,7 @@
 #include <vector>
 #include <queue>
 #include <limits.h>
+#include <float.h>
 #include <list>
 using namespace std;
 #define DEBUG_PRINT
@@ -32,10 +33,13 @@ using namespace std;
 class Graph;
 class DepthFirstPaths;
 class BreadthFirstPaths;
-
+class WeightEdge;
+class EdgeWeightGraph;
 ostream& operator<<(ostream &os, Graph &g);
 ostream& operator<<( ostream &os, DepthFirstPaths &dfs);
 ostream& operator<<(ostream &, BreadthFirstPaths &);
+std::ostream& operator<<(std::ostream &os, const WeightEdge &e);
+std::ostream& operator<<(std::ostream &os, const EdgeWeightGraph &g);
 
 class Graph{
 	
@@ -245,4 +249,166 @@ class CC{
 			return sz[ __id[v] ];
 		}
 };
+
+class WeightEdge{
+	private:
+		//one vertex
+		int u;
+		//another vertex
+		int v;
+		//weight
+		double wt;
+	public:
+	
+		/*	@brief default constructor
+		 */
+		WeightEdge():u(-1),v(-1),wt(DBL_MAX){}
+	
+		/*	@brief copy constructor
+		 */
+		WeightEdge(const WeightEdge &that):
+			u(that.u), v(that.v), wt(that.wt){}
+
+		/*	@brief assignment operator
+		 */
+		WeightEdge& operator=(const WeightEdge &that){
+			u = that.u;
+			v = that.v;
+			wt = that.wt;
+			return *this;
+		}
+		/*	@brief construct with tree parameters
+		 */
+		WeightEdge(int _u, int _v, double _w):
+			u(_u), v(_v), wt(_w) { }
+		
+		/*	@brief return weight of this edge
+		 */
+		double weight() const {
+			return wt;
+		}
+
+		/*	@brief return either vertex of Edge
+		 */
+		int either()const{
+			return u;
+		}
+		/*	@brief return another vertex of edge
+		 */
+		int other(int _v) const{
+			if( _v == u ){
+				return v;
+			}else if( _v == v){
+				return u;
+			}else{
+				std::cerr<<"in consistent"<<std::endl;
+				return -1;
+			}
+		}
+
+		/*	@brief one vertex
+		 */
+		int oneVertex()const{
+			return u;
+		}
+		/*	@brief another vertex
+		 */
+		int anotherVertex() const{
+			return v;
+		}
+
+		/*	@brief six comparative operators overload
+		 */
+		bool operator==(const WeightEdge &that) const {
+			return wt == that.wt;
+		}
+		bool operator<(const WeightEdge &that) const {
+			return wt < that.wt;
+		}
+		bool operator>(const WeightEdge	&that) const {
+			return wt > that.wt;
+		}
+		bool operator<=(const WeightEdge &that) const {
+			return wt <= that.wt;
+		}
+		bool operator>=(const WeightEdge &that) const {
+			return wt >= that.wt;
+		}
+		bool operator!=(const WeightEdge &that) const {
+			return wt != that.wt;
+		}
+
+};
+
+/*	@brief edge weighted graph
+ *	
+ */
+class EdgeWeightGraph{
+	
+	friend std::ostream& operator<<(std::ostream &os, const EdgeWeightGraph &g);
+
+	private:
+		typedef WeightEdge Edge;
+		//no. of vertices
+		int _V;
+		//no. of edges
+		int _E;
+		//adjacent list
+		vector<list<Edge> > _adj;
+
+	public:
+
+		/*	@brief construct with V vertices and no edges
+		 */
+		EdgeWeightGraph(int V){
+			_V = V;
+			_E = 0;
+			_adj = vector<list<Edge> >(V);
+		}
+	
+
+		/*	@brief get all edges
+		 *		return a vector of all edges
+		 */
+		vector<Edge> allEdges()const{
+			vector<Edge> edges;
+			//for all vertex
+			for(int v=0; v<_V; ++v){
+				//for all adjacent vertices add it's corresponding edge
+				//but only add a time
+				list<Edge>::const_iterator it;
+				for(it = _adj[v].begin(); it != _adj[v].end(); ++it){
+					int w = it->other(v);
+					//only add a time
+					if( v > w ){
+						edges.push_back(*it);	
+					}
+				}
+			}
+			return edges;
+		}
+
+		/*	@brief return const reference of vertex v's adjacent list
+		 */
+		const list<Edge>& adj(int v)const{
+			return _adj[v];
+		}
+
+		/*	@brief construct with input stream
+		 */
+		EdgeWeightGraph(istream &is);
+
+		/*	@brief add a weight edge
+		 */
+		void addEdge(Edge e);
+		
+		/*	@brief return no. of vertices
+		 */
+		int V()const{ return _V; }
+
+		/*	@brief return no. of edges
+		 */
+		int E()const{ return _E; }
+};
+
 #endif 

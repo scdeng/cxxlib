@@ -138,6 +138,7 @@ template <typename T> class Array{
 			if( i >= sz || i < 0){
 				//delete pointer
 				delete [] ptr;
+				//ptr = NULL;
 				std::cerr<< "index is " << i <<std::endl;
 				std::cerr<<"index out of bounds error..." 
 					<< "\nprogram exits......" <<std::endl;
@@ -172,6 +173,7 @@ template <typename T> class Array{
 				delete [] ptr;
 				//reset ptr
 				ptr = new_ptr;
+				
 			}else{
 				//move data  
 				for(unsigned i=sz; i>idx; --i){
@@ -193,7 +195,9 @@ template <typename T> class Array{
 			for(unsigned i=idx; i<sz-1; ++i){
 				*(ptr+i) = *(ptr+i+1);
 			}
-			ptr[sz] = T();
+			//it's a bug ......
+			//ptr[sz] = T();
+			ptr[sz-1] = T();
 			//decreament sz
 			--sz;
 		}
@@ -203,6 +207,7 @@ template <typename T> class Array{
 		void destroy(){
 			sz = 0;
 			delete [] ptr;
+			ptr=NULL;
 		}
 
 		/*	@brief deep copy data from src pointer to destination
@@ -270,7 +275,7 @@ template <typename T> class Array{
 		/*	@brief destructor
 		 */
 		~Array(){
-			destroy();
+			delete [] ptr;
 		}
 		
 		/* 	@brief push t to the end of Array 

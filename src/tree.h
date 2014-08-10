@@ -19,11 +19,12 @@
 #ifndef TREE_H
 #define TREE_H
 #include <stdlib.h>
+#include <cassert>
+#include "queue.h"
 #include <iostream>
 //#define DEBUG_PRINT
 //#define DEBUG_CHECK
 //#define DEBUG_CHECK_PRINT
-#include "queue.h"
 
 template <typename T> 
 T maximum(const T &one, const T &another){
@@ -139,7 +140,6 @@ template <typename K, typename V> class BSTree{
 				//insert to p's left child
 				p->left = insert(p->left, k, v);
 			}else{
-				//insert ot p's right child
 				p->right = insert(p->right, k, v);
 			}
 			//update sz of tree rooted in p 
@@ -321,19 +321,6 @@ template <typename K, typename V> class BSTree{
 				return p;
 			}
 		}
-//		//largest key in subtree p which is less than or equal to k
-//		K ceiling(TreeNode<K,V> *p, const K &k){
-//			if( !p ) return K();
-//
-//			if( p->key < k){
-//				
-//			}else ( p->key > k ){
-//
-//			}else{
-//				return p->key;
-//			} 
-//
-//		}
 
 	public:
 		BSTree():root(NULL){}
@@ -342,7 +329,6 @@ template <typename K, typename V> class BSTree{
 				removeMax();
 			}
 		}
-
 		
 		//select k th Key in increasing order
 		K select(unsigned k){
@@ -351,7 +337,6 @@ template <typename K, typename V> class BSTree{
 			}
 			return select(root,k)->key;
 		}
-		
 		
 		//no. of keys less than k
 		int rank(const K &k){
@@ -363,8 +348,6 @@ template <typename K, typename V> class BSTree{
 			keys(q, root);
 			return q;
 		}
-
-		
 
 		//return height of tree
 		int height(){
@@ -419,13 +402,10 @@ template <typename K, typename V> class BSTree{
 			}
 		}
 
-		//return max node
-//		TreeNode<K,V> * max(){
-//			return max(root);
-//		}
 		//return max key
 		K max(){
 			TreeNode<K,V> *p = max(root);
+			assert (p);
 			if(p == NULL){
 				std::cerr<< " access empty BST " <<std::endl;
 				std::cerr<< " returning Key is undefined... " << std::endl;
