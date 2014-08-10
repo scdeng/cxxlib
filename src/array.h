@@ -121,27 +121,32 @@ template <typename T> class Array{
 		//reference count
 		//int *ref_count;
 		
-		//get the least power of 2 which is greater than n
+		/*	@brief get the minimum number of power of 2 which is greater than n
+		 */
 		size_t get_least_power_2(size_t n){
 			size_t bits = 0;
 			while(n > 0 ){
 				n = (n >> 1);
 				++bits;
 			}
-			
 			return 1 << bits;
 		}
 		
+		/*	@brief check if index is out of bounds
+		 */
 		void check_index(size_t i) const {
-			if( i > sz || i < 0){
+			if( i >= sz || i < 0){
 				//delete pointer
 				delete [] ptr;
 				std::cerr<< "index is " << i <<std::endl;
-				std::cerr<<"index out of bounds error..." << "\nprogram exits......" <<std::endl;
+				std::cerr<<"index out of bounds error..." 
+					<< "\nprogram exits......" <<std::endl;
 				exit(1);
 			}
 		}
-		
+	
+		/*	@brief insert t at position idx
+		 */
 		void __insert__(size_t idx, const T &t){
 			//there is no room for new item
 			if ( sz == cap ){
@@ -178,6 +183,8 @@ template <typename T> class Array{
 				++sz;
 			}
 		}
+		/*	@brief remove idx th element
+		 */
 		void __erase__(size_t idx){
 			if( idx >= sz ){
 				return ;
@@ -185,182 +192,197 @@ template <typename T> class Array{
 			//move data
 			for(unsigned i=idx; i<sz-1; ++i){
 				*(ptr+i) = *(ptr+i+1);
-			}	
+			}
+			ptr[sz] = T();
 			//decreament sz
 			--sz;
+		}
+		
+		/*	@brief destroy this array
+		 */
+		void destroy(){
+			sz = 0;
+			delete [] ptr;
+		}
+
+		/*	@brief deep copy data from src pointer to destination
+		 *	@param src	copy from
+		 *	@param dest	copy to
+		 *	@param n	number of elements
+		 */
+		void deep_copy_data(T *src, T* dest, size_t n){
+			for(size_t i=0; i<n; ++i){
+				*(dest+i) = *(src+i);
+			}
 		}
 
 	public:
 		typedef Iterator__Seq<T> iterator;
-		//default constructor
-		//initialize size to 0 ,capacity to 1
+		/*	@brief default constructor 
+		 * 		initialize size to 0 ,capacity to 1
+		 */
 		Array(): sz(0), cap(1), ptr(new T[1]){ }
 		
-		//construct an Array contain size of T
+		/* @brief construct an Array contain size of T
+		 * @param 	size	number of elements
+		 * 			if size < 1 make an empty array
+		 * @param 	t		
+		 */
 		Array(size_t size, const T &t) {
-			sz = size;
-			cap = get_least_power_2(size);
-			ptr = new T[cap];
-			for(int i=0; i<size; ++i){
-				*(ptr+i) = t;
-			}
-		}
-		
-		~Array(){
-			delete []ptr;
-		}
-
-		//copy constructor
-		//deep copy constructor
-		Array(const Array &from){
-			sz = from.sz;
-			cap = get_least_power_2(sz);
-			ptr = new T[cap];
-#ifdef MEMCOPY
-			memcpy(ptr, from.ptr, sizeof(T) * sz);
-#else
-			for(int i=0; i<sz; ++i){
-				*(ptr + i) = from[i];
-			}
-#endif
-		}
-		
-
-		//assignment operator
-		//deep copy assignment
-		Array& operator=( const Array &that){
-			//check self assignment
-			if (this != &that){
-				delete []ptr;
-				sz = that.sz;
-				cap = get_least_power_2(sz);
+			if(size < 1){
+				sz = 0; 
+				cap = 1;
+				ptr = new T[1];
+			}else{
+				sz = size;
+				cap = get_least_power_2(size);
 				ptr = new T[cap];
-#ifdef MEMCOPY
-				//if T has reference count
-				//bugs occur
-				memcpy(ptr, that.ptr, sizeof(T) * sz);
-#else	
-				for(int i=0; i<sz; ++i){
-					*(ptr+i) = that[i];
+				for(unsigned i=0; i<size; ++i){
+					*(ptr+i) = t;
 				}
-#endif
 			}
 		}
+	
+		/*	@brief copy constructor
+		 *		deep copy data
+		 */
+		Array(const Array &from) {
+			ptr = new T[from.cap];
+			sz = from.sz;
+			cap = from.cap;
+			deep_copy_data(from.ptr, ptr, sz);
+		}
 		
+		/*	@brief assignment operator
+		 *		deep copy data
+		 */
+		Array& operator=(const Array &that){
+			if( this != &that ){
+				destroy();
+				sz = that.sz;
+				cap = that.cap;
+				ptr = new T[cap];
+				deep_copy_data(that.ptr, ptr, sz);
+			}
+			return *this;
+		}
 
-		//push t to the end of Array
-		//if there is no room reallocate enough memory
+		/*	@brief destructor
+		 */
+		~Array(){
+			destroy();
+		}
+		
+		/* 	@brief push t to the end of Array 
+		 *  	if there is no room reallocate enough memory
+		 */
 		void push_back(const T &t){
-//			//no capacity to push 
-//			//increase cap to 2*cap
-//			if(sz == cap){
-//				T *new_ptr = new T[2*cap];
-//#ifdef MEMCOPY
-//				//bug prone
-//				memcpy(new_ptr, ptr, sizeof(T) * sz);
-//#else
-//				for(unsigned i=0; i<sz;++i){
-//					*(new_ptr+i) = *(ptr+i);
-//				}
-//#endif
-//				new_ptr[sz++] = t;
-//				cap *= 2;
-//				delete [] ptr;
-//				ptr = new_ptr;
-//			}else{
-//				ptr[sz++] = t;
-//			}
 			__insert__(sz, t);
 		}
 		
-		//erase the last element of Array
+		/*	@brief erase the last element of Array
+		 */
 		T pop_back(){
 			T t = *(ptr+sz-1);
 			__erase__(sz-1);
 			return t;
 		}
 
-		//overload operator[] 
-		//@param i:	i should be greater than or equal to 0
-		//and smaller than sz
-		T& operator[](size_t i)
-		{
+		/* 	@brief overload operator[] 
+		 * 	@param i:	i should be greater than or equal to 0 
+		 * 		and smaller than sz
+		 */
+		T& operator[](size_t i){
 			check_index(i);
 			return *(ptr+i);
 		}
-		const T& operator[](size_t i)const 
-		{
+		
+		const T& operator[](size_t i)const {
 			check_index(i);
 			return *(ptr+i);
 		}
 
 
-		//insert t into position idx
+		/*	@brief insert t into position idx
+		 */
 		void insert(size_t idx, const T &t){
-			check_index(idx);
+			//check_index(idx);
+			if( idx > sz ){
+				std::cerr<<"Index out of bounds error" << std::endl;
+				exit(-1);
+			}
 			__insert__(idx, t);
 		}
 
-		//erase element in position idx 
-		//it is less efficient than linked list
+		/*	@brief erase element at position idx
+		 *		it is less efficient than linked list
+		 */
 		void erase(size_t idx){
-			check_index(idx);
-//			//move data
-//			for(unsigned i=idx; i<sz-1; ++i){
-//				*(ptr+i) = *(ptr+i+1);
-//			}	
-//			//decreament sz
-//			--sz;
+			if(idx >= sz){
+				std::cerr<<"Index out of Bounds error" <<std::endl;
+				exit(1);
+			}
 			__erase__(idx);
 		}
 
-		//clear the element of Array
+		/*	@brief clear the element of Array
+		 */
 		void clear(){
-			delete [] ptr;
+			destroy();
 			ptr = new T[1];
 			sz = 0;
 			cap = 1;
 		}
-
+		
+		/*	@brief return an iterator (the first element)
+		 */
 		iterator begin() const {
 			return Iterator__Seq<T>(ptr,0);
 		}
-		
+	
+		/*	@brief return one off the end iterator
+		 */
 		iterator end() const {
 			return Iterator__Seq<T>(ptr,sz);
 		}
-		
+	
+		/*	@brief insert t into pos
+		 */
 		void insert(iterator pos, const T &t){
 			size_t p = pos.offset;
 			__insert__(p, t);
 		}
-		
+	
+		/*	@brief delete element 
+		 */
 		void erase(iterator pos){
 			size_t p = pos.offset;
 			__erase__(p);
 		}
 		
-//		template <typename InputIterator__Seq>
-//		void insert(iterator pos, InputIterator__Seq beg, InputIterator__Seq end){
-//			
-//		}
-		
+	
+		/*	@brief swap two element
+		 */
 		void swap(iterator one, iterator another){
 			T t = *one;
 			*one = *another;
 			*another = t;
 		}
 
-		//return the size of Array
+		/*	@brief return the size of Array
+		 */
 		size_t size()const{
 			return sz;
 		}
 		
-		//return the capacity of Array
+		/*	@brief return the capacity of Array
+		 */
 		size_t capacity()const{
 			return cap;
 		}
-		
+	
+		/*	@brief check if array is empty
+		 */
 		bool empty() const {
 			return sz == 0;
 		}
@@ -368,11 +390,12 @@ template <typename T> class Array{
 
 template <class T> std::ostream & operator<<(std::ostream &os, const Array<T> &a){
 	os << "{";
-	for(unsigned  i=0; i<a.size()-1; ++i){
+	int sz = a.size();
+	for(int i=0; i<sz-1; ++i){
 		os << a[i] << ", ";
 	}
-	if( a.size() -1 >= 0){
-		os << a[a.size()-1];
+	if( sz - 1 >= 0){
+		os << a[sz - 1];
 	}
 	os << "}" << std::endl;
 	return os;
