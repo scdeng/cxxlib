@@ -25,11 +25,24 @@
 #include <queue>
 #include <list>
 #include <iostream>
-
+#include <cstdlib>
+#include <cfloat>
 using namespace std;
 
 class Digraph;
 std::ostream& operator<<(ostream&, const Digraph&);
+class DirectedWeightedEdge;
+class EdgeWeightedDigraph;
+
+/*	@brief overload operator<<
+*/
+std::ostream& operator<<(ostream &os, const DirectedWeightedEdge &e);
+
+/*	@brief overload operator<<
+*/
+std::ostream& operator<<(ostream &os, const EdgeWeightedDigraph &G);
+
+
 
 /*	@brief Directed Graph 
  */
@@ -402,6 +415,253 @@ class SCC{
 			return __count;
 		}
 };
+
+
+//================Edge weighted Digraph=================//
+
+class DirectedWeightedEdge{
+	
+	friend std::ostream& operator<<(ostream &os, const DirectedWeightedEdge &e);
+	private:
+		//start vertex
+		int _u;
+		//end vertex
+		int _v;
+		//weight of this edge
+		double wt;
+
+	public:
+		/*	@brief default constructor
+		 */
+		DirectedWeightedEdge(): _u(-1), _v(-1), wt(DBL_MAX) { }
+		
+		/*	@brief construct with u->v with weight w
+		 */
+		DirectedWeightedEdge(int u, int v, double w):
+			_u(u), _v(v), wt(w) { }
+
+		/*	@brief return start vertex
+		 */
+		int from() const{
+			return _u;
+		}
+	
+		/*	@brief return end vertex
+		 */
+		int to() const{
+			return _v;
+		}
+		
+		/*	@brief return weight of edge
+		 */
+		double weight() const {
+			return wt;
+		}
+};
+
+/*	@brief edge weighted Digraph(EWD for short)
+ */
+class EdgeWeightedDigraph{
+	
+
+	friend std::ostream& operator<<(ostream &os, const EdgeWeightedDigraph &G);
+	private:
+		typedef DirectedWeightedEdge Edge;
+		//no. of vertices
+		int _V;
+		//no. of edges
+		int _E;
+		//adjacent list
+		vector<list<Edge> > _adj;
+		
+		/*	@brief check if a vertex is Valid for this EWD
+		 */
+		bool check_vertex(int v) const {
+			if( v < _V && v >= 0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+
+	public:
+		/*	@brief construct a EWD vertices with no edges
+		 */
+		EdgeWeightedDigraph(int N):
+			_V(N), _E(0), _adj( vector<list<Edge> >(N) ) { }
+
+		/*	@brief construct a EWD with input stream
+		 */
+		EdgeWeightedDigraph(istream &is){
+			int V;
+			int E;
+			is >> V;
+			is >> E;
+			_V = V;
+			_E = 0;
+			_adj = vector<list<Edge> >(V);
+			int u, v;
+			double w;
+			while( is >> u && is >> v && is >> w){
+				addEdge(u,v,w);
+			}
+		}
+
+		/*	@brief copy constructor
+		 */
+		EdgeWeightedDigraph(const EdgeWeightedDigraph &ewd):
+			_V(ewd._V), _E(ewd._E), _adj(ewd._adj){ }
+	
+		/*	@brief assignment operator
+		 */
+		EdgeWeightedDigraph& operator=(const EdgeWeightedDigraph &that){
+			_V = that._V;
+			_E = that._E;
+			_adj = that._adj;
+			return *this;
+		}
+		
+		/*	@brief add an edge to EWD with no duplicate edge detection
+		*/
+		void addEdge(const Edge &e) {
+			//get e's vertices
+			int u = e.from();
+			int v = e.to();
+			//check if vertex is valid
+			if ( !check_vertex(u) || !check_vertex(v) ){
+				std::cerr<<"you made a mistake..."<<std::endl;
+				std::cerr<<"please check your edge is correct..."<<std::endl;
+				return ;
+			}
+			//push e to u's adjacent list
+			_adj[u].push_back(e);
+			++_E;
+		}
+
+		/*	@brief add an edge with two vertices and a weight
+		 */
+		void addEdge(int u, int v, double w){
+			//construct an edge
+			Edge e(u,v,w);
+			addEdge(e);
+		}
+
+		/*	@brief return no. of vertices
+		*/
+		int V() const {
+			return _V;
+		}
+
+		/*	@brief return no. of edges
+		*/
+		int E() const {
+			return _E;
+		}
+
+
+		/*	@brief return a const reference of v's adjacent list
+		*/
+		const list<Edge> & adj(int v)const{
+			if( !check_vertex(v) ){
+				std::cerr<<"access non-vertex's adjacent..." <<std::endl;
+				std::cerr<<"oops!!! crashed..."<<std::endl;
+				exit(1);
+			}
+			return _adj[v];
+		}
+
+		/*	@brief check if EWD is empty
+		 */
+		bool empty(){
+			return _V == 0;
+		}
+};
+
+class EdgeWeightedDirectedCycle{
+
+	private:
+		typedef EdgeWeightedDigraph EWD;
+		typedef DirectedWeightedEdge Edge;
+		//vector
+		vector<bool> marked;
+		//v is searched when onStack[v] is true
+		vector<bool> onStack;
+		//return cycle
+		deque<Edge> cyc;
+		//dfs search tree
+		//parent index representation
+		vector<Edge> edgeTo;
+
+		/*	@brief depth first search to detect cycle
+		 *
+		 */
+		void dfs(const EWD &dg, int v){
+			marked[v] = true;
+			onStack[v] = true;
+			list<Edge>::const_iterator it;
+			for( it = (dg.adj(v)).begin(); it != dg.adj(v).end(); ++it){
+				//there exists a cycle
+				if( hasCycle() ){
+					return ;
+				}
+				//to vertex	v->w
+				int w = it->to();
+				// w is not visited
+				// recursively visit it
+				if( !marked[w] ){
+					edgeTo[w] = *it;
+					dfs(dg, w);
+				}else{
+					//cycle detected
+					if( onStack[w] ){
+						cyc.push_front(*it);
+						int x = it->from();
+						while( edgeTo[x].from() != w ){
+							cyc.push_front(edgeTo[x]);
+							x = edgeTo[x].from();
+						}
+						cyc.push_front(edgeTo[x]);
+					}
+				}
+			}
+			//v has been searched
+			onStack[v] = false;
+		}
+
+	public:
+
+		/*	@brief construct a Directed Cycle objec with Digraph
+		 *	composite design pattern
+		 */
+		EdgeWeightedDirectedCycle(const EWD &dg){
+			//initialize members
+			marked = vector<bool>(dg.V(), false);
+			onStack = vector<bool>(dg.V(), false);
+			cyc = deque<Edge>();
+			edgeTo = vector<Edge>(dg.V());
+			for(int v=0; v < dg.V(); ++v){
+				if( !marked[v] ){
+					dfs(dg, v);
+				}
+			}
+
+		}
+
+		/*	@brief has a cycle in this DG
+		*/
+		bool hasCycle(){
+			return (cyc.size() != 0);
+		}
+		/*	@brief return cycle
+		 *			if there exists no cycle
+		 *			return a empty cycle
+		 */
+		const deque<Edge>& cycle() const {
+			return cyc;
+		}
+};
+
 
 
 #endif

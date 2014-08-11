@@ -374,3 +374,22 @@ SCC::SCC(const Digraph &dg){
 }
 //===========kosaraju strongly connected componetn===========//
 
+//===========================weighted digraph===============//
+std::ostream& operator<<(ostream &os, const DirectedWeightedEdge &e){
+	os<<"[" << e._u <<"->"<<e._v<<", "<<e.wt<<"]";
+	return os;
+}
+std::ostream& operator<<(ostream &os, const EdgeWeightedDigraph &G){
+	os<<G._V<<" vertices and " << G._E << " edges" << std::endl;
+	for(int v=0; v<G._V; ++v){
+		os<<v<<": {" ;
+		list<DirectedWeightedEdge>::const_iterator it;
+		for(it = G._adj[v].begin(); it != G._adj[v].end(); ++it){
+			os<<*it<<", ";	
+		}
+		os<<"}"<<std::endl;;
+	}
+	os<<std::endl;
+	return os;
+}
+

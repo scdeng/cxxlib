@@ -294,15 +294,19 @@ template <typename K> class IndexMinPQ{
 
 
 	public:
-		
-//		IndexMinPQ(){
-//			int maxN = 1;
-//			NMAX = maxN;
-//			N = 0;
-//			keys = Array<K>(maxN + 1, K());
-//			pq = Array<int>(maxN + 1, -1);
-//			qp = Array<int>(maxN, -1);
-//		}
+	
+		/*	@brief default constructor
+		 *		using for some cases in which IndexMinPQ is a member
+		 *		some class, but this class is not initialized all ()
+		 */
+		IndexMinPQ(){
+			int maxN = 1;
+			NMAX = maxN;
+			N = 0;
+			keys = Array<K>(maxN + 1, K());
+			pq = Array<int>(maxN + 1, -1);
+			qp = Array<int>(maxN, -1);
+		}
 		/*	@brief construct with maximum number index
 		 */
 		IndexMinPQ(int maxN){
