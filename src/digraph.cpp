@@ -86,12 +86,25 @@ Digraph::Digraph(istream &is){
 DirectedDFS::DirectedDFS(const Digraph &dg, int s){
 	marked = vector<bool>(dg.V(), false);
 	edgeTo = vector<int>(dg.V());
-	__s = s;
+	srcs = set<int>();
+	srcs.insert(s);
 	for(unsigned i=0; i<edgeTo.size(); ++i){
 		edgeTo[i] = i;
 	}
 	dfs(dg,s);
 }
+
+DirectedDFS::DirectedDFS(const Digraph &dg, const std::vector<int> &sources){
+	marked = vector<bool>(dg.V(), false);
+	edgeTo = vector<int>(dg.V());
+	srcs = set<int>(sources.begin(), sources.end());
+	for(size_t i=0; i<sources.size(); ++i){
+		if( !marked[ sources[i] ] ){
+			dfs(dg, sources[i] );
+		}
+	}
+}
+
 
 /*	@brief depth first search a DG
 */
@@ -106,13 +119,17 @@ void DirectedDFS::dfs(const Digraph &dg, int v){
 	}
 }
 
+
+/*	@brief return path from src to v
+ *		src is a set of integer
+ */
 deque<int> DirectedDFS::pathTo(int v){
 	deque<int> path;
-	while( v != __s ){
+	while( srcs.find(v) != srcs.end() ){
 		path.push_front(v);
 		v = edgeTo[v];
 	}
-	path.push_front(__s);
+	path.push_front( *(srcs.find(v)) );
 	return path;
 }
 //====================DFS path====================//

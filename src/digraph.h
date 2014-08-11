@@ -22,6 +22,7 @@
 #include <limits.h>
 #include <deque>
 #include <vector>
+#include <set>
 #include <queue>
 #include <list>
 #include <iostream>
@@ -141,7 +142,7 @@ class DirectedDFS{
 		vector<int> edgeTo;
 		
 		//source
-		int __s;
+		set<int> srcs;
 
 		/*	@brief depth first search a DG
 		 */
@@ -153,7 +154,11 @@ class DirectedDFS{
 		 *	@param s	source 
 		 */
 		DirectedDFS(const Digraph &dg, int s);
-		
+
+		/*	@brief check reachability from sources
+		 */
+		DirectedDFS(const Digraph &dg, const vector<int> &sources);
+
 		/*	@brief return a path to vertex v
 		 *	@param v	path from s to v
 		 */

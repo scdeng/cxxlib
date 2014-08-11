@@ -1,2 +1,72 @@
-CXX template library
+CXX template library and basic graph algorithms
+
+1.array.h
+	
+2.list.h
+
+3.stack
+
+4.queue
+
+5.tree.h
+	binary search tree
+
+6.rbtree.h
+	template red black tree
+
+7.map.h
+	map: red black tree adapter
+
+8.set.h
+	set: red black tree adapter
+
+9.priority_queue.h
+	MinPQ & IndexMinPQ: heap based priority queue implementation
+	minimum priority queue: min heap
+	Indexed minimum priority queue: associate each key with an index
+
+10. union_find.h
+	weighted quick union implementation with path compression
+
+11.graph.h graph.cpp
+	undirected graph
+	Graph:	adjacent list
+	dfs
+	bfs
+	connected component
+	EdgeWeightGraph: adjacent list representation
+
+12.digraph.h digraph.cpp
+	directed graph
+	Digraph: adjacent list
+	DFS
+	BFS
+	DAG
+	Topological Sort
+	Strongly connected conponent
+	EdgeWeightedDigraph:	adjacent list representation
+
+13.mst.h mst.cpp
+	minimum spanning tree
+	a). prim's algorithm with lazy and instant verion
+		lazy version implementation based on priority queue
+		instant version implementation based on index priority queue
+	b). Kruskal's algorithm
+		implementation based on minimum priority queue and union find data structure
+
+14.shortest_path.h shortest_path.cpp
+	shortest path algorithm
+	a). Dijkstra's algorithm
+		implementation based on indexed minimum priority queue
+		it is similiar with Prim's instant version
+	b). Bellman-Ford with naive and queue based version
+
+15.regex.h regex.cpp
+	substring search & regular expression
+	a). DFA based substring search
+	b). NFA based regular expressioin match
+		.cancatenation			eg. AB
+		.closure				eg. A*
+		.or( with parentheses)  eg.  (AC|BD)
+		eg. ((A*B|AC)D)
 
