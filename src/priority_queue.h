@@ -178,13 +178,21 @@ class MinPQ{
 			K minKey = keys[1];
 			swap(1, N--);
 			sink(1);
-#ifdef DEBUG_TEST
+#ifdef DEBUG_TESTBAC
 
 			std::cout<<"keys are: " <<keys;
 #endif
 			//this is a bug.....
 			keys.pop_back();
 			return minKey;
+		}
+
+		K min()const{
+			if( empty() ){
+				std::cerr<<"access empty pq..."<<std::endl;
+				exit(-1);
+			}
+			return keys[1];
 		}
 
 		/*	@brief return size of pq
@@ -427,6 +435,236 @@ std::ostream& operator<<(std::ostream &os, const IndexMinPQ<K> &mpq){
 	os<<mpq.qp;
 	return os;
 }
+
+
+/*	@brief
+ *		it makes sense to allow clients to refer items 
+ *		which are already on priority queue
+ *		one way to do this is to associate a unique index
+ *		with each item
+ */
+template <typename K> class IndexMaxPQ{
+
+	template <typename T> 
+	friend std::ostream& operator<<(std::ostream &os, const IndexMaxPQ<T> &mpq);
+
+	private:
+		int N;
+		int NMAX;
+		//keys[1...N] are heap data
+		Array<K> keys;
+		//index of heap
+		Array<int> pq;
+		//reverse index
+		//qp[pq[i]] = i
+		Array<int> qp;
+		
+		/*	@brief check if keys[ pp[i] ] is less than keys[ pq[j] ]
+		 *	@param i	pq[i] is the key
+		 *	@param j	pq[j] is the key
+		 */
+		bool less(int i, int j)const {
+			return keys[ pq[i] ] < keys[ pq[j] ];
+		}
+	
+		/*	@brief check if keys[ pq[i] ] is greater than keys[ pq[j] ]
+		 */
+		bool greater(int i, int j) const {
+			return keys[ pq[i] ] > keys[ pq[j] ];
+		}
+
+		void swap(int i, int j){
+			//swap pq
+			int tmp = pq[i];
+			pq[i] = pq[j];
+			pq[j] = tmp;
+			
+			//update qp
+			qp[pq[i]] = i;
+			qp[pq[j]] = j;
+		}
+
+		/*	@brief swim pq[i]
+		 */
+		void swim(int i){
+			while( i > 1 && greater(i, i>>1) ){
+				swap(i, i>>1);
+				i >>= 1;
+			}
+		}
+		
+		/*	@brief sink pq[i]
+		 *		what elagant and beautiful code block
+		 */
+		void sink(int i){
+			//i is current index
+			while( 2*i <= N ){
+				//invariant
+				//j is possible next sink index
+				int j = 2*i;
+				if( j < N && greater(j+1, j) ){
+					++j;
+				}
+				if( !greater(j, i) ) {
+					break;
+				}
+				//
+				swap(i,j);
+				i = j;
+			}
+		}
+
+		/*	@brief check if index is less than NMAX and 
+		 *		greater than or equal to 0
+		 */
+		bool check_index(int index){
+			if( index < NMAX && index >= 0 ){
+				return true;
+			}else{
+				std::cerr<<
+					"Index should less than maximun # of elements on pq" << std::endl;
+				exit(1);
+			}
+		}
+
+
+	public:
+	
+		/*	@brief default constructor
+		 *		using for some cases in which IndexMaxPQ is a member of
+		 *		some class, but this class is not initialized after ()
+		 *		.....this is a .......bad case.......
+		 */
+		IndexMaxPQ(){
+			int maxN = 1;
+			NMAX = maxN;
+			N = 0;
+			keys = Array<K>(maxN + 1, K());
+			pq = Array<int>(maxN + 1, -1);
+			qp = Array<int>(maxN, -1);
+		}
+		/*	@brief construct with maximum number index
+		 */
+		IndexMaxPQ(int maxN){
+			//maximum # of elements on priority queue
+			NMAX = maxN;
+			N = 0;
+			keys = Array<K>(maxN + 1, K());
+			pq = Array<int>(maxN + 1, -1);
+			qp = Array<int>(maxN, -1);
+		}
+	
+		void remove(int index){
+			check_index(index);
+			if( !contain(index) ){
+				std::cerr<<"index is not contained on priority queue" <<std::endl;
+				return ;
+			}
+			//k is where index of element is
+			int k = qp[index];
+			//swap k with last
+			swap(k, N--);
+			//swap k
+			swim(k);
+			//sink k
+			sink(k);
+			//reset keys[index]
+			keys[index] = K();
+			//remove index
+			qp[k] = -1;
+		}
+
+		/*	@brief remove maximum key
+		 *		return index of maximum key
+		 */
+		int removeMax(){
+			//
+			int indexOfMax = pq[1];
+			//swap max and last element
+			swap(1,N--);
+			//sink first
+			sink(1);
+			//update keys
+			//K maxKey = keys[indexOfMax];
+			qp[pq[N+1]] = -1;
+			keys[pq[N+1]] = K();
+			return indexOfMax;
+		}
+
+		/*	@brief change k associates with index
+		 *	@param index if index is not contained 
+		 *		insert it into priority queue
+		 *	@param k
+		 */
+		void changeKey(int index, const K &k){
+			check_index(index);
+			if( !contain(index) ){
+				insert(index, k);
+				return ;
+			}
+			keys[index] = k;
+			swim( qp[index] );
+			sink( qp[index] );
+		}
+
+		/*	@brief insert index with k
+		 *	@param index if index is already on priority queue
+		 *		change its corresponding key to k
+		 *	@param k
+		 */
+		void insert(int index, const K &k){
+			check_index(index);
+			if( contain(index) ){
+				changeKey(index,k);
+				return ;
+			}
+			++N;	
+			//put k into keys		
+			keys[index] = k;
+			//put index on pq
+			pq[N] = index;
+			//update inverse index
+			qp[index] = N;
+			//swim pq[N]
+			swim(N);
+		}
+		
+		/*	@brief return index of maximum key
+		*/
+		int maxIndex() const{
+			return pq[1];
+		}
+		
+		/*	@brief return the maximum key
+		*/
+		K max()const{
+			return keys[pq[1]];
+		}
+	
+		/*	@brief check if index is contained
+		 */
+		bool contain(int index){
+			return qp[index] != -1;
+		}
+
+		/*	@brief if queue is empty
+		 */
+		bool empty() const {
+			return N == 0;
+		}
+
+};
+
+template <typename K> 
+std::ostream& operator<<(std::ostream &os, const IndexMaxPQ<K> &mpq){
+	os<<mpq.keys;
+	os<<mpq.pq;
+	os<<mpq.qp;
+	return os;
+}
+
+
+
 
 
 #endif
