@@ -85,7 +85,7 @@ inline size_t hashcode(unsigned long n){
 
 
 //using namespace std;
-#define DEBUG
+//#define DEBUG
 template <typename TK, typename TV> 
 class Pair{
 	private:
@@ -144,10 +144,12 @@ class HashMap{
 		typedef typename std::list<Pair<K,V> >::iterator Pair_Iter;
 
 		static const size_t INIT_CAPACITY = 7u;
+		static const size_t MAX_LOAD_FACTOR = 7u;
 		//no. of <k,v> pairs
 		size_t _N;
 		//size of hash table
 		size_t _M;
+
 		//data
 		//vector<list<Pair<K,V> > > _table;
 		HashTable _table;
@@ -193,7 +195,7 @@ class HashMap{
 			++_N;
 			//if load factor is more than ten
 			//resize hash table
-			if( _N > 7 * _M ){
+			if( _N > MAX_LOAD_FACTOR * _M ){
 				size_t bits = get_least_power_2(_N);
 #ifdef DEBUG
 				std::cout << bits << " bits of " << _N << std::endl;
