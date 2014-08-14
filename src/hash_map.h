@@ -138,6 +138,11 @@ class HashMap{
 			}
 			//increase size of hash map
 			++_N;
+			//if load factor is more than ten
+			//resize hash table
+			if( _N > 10 * _M ){
+				resize(5 * _M);
+			}
 		}
 
 		/*	@brief remove k
@@ -247,6 +252,44 @@ class HashMap{
 			_table = that._table;
 		}
 		
+
+		/*	@brief overload subscript operator
+		 *		return a reference of k's corresponding value
+		 *
+		 */
+		V& operator[](const K &k){
+			//get index 
+			size_t idx = hash(k);
+			Pair_Iter it = __find(idx, k);
+			if( it == _table[idx].end() ){
+				//k is not contained
+				//insert k with a random value
+				V v = V();
+				Pair pair(k,v);
+				__insert(pair);
+				//get index again
+				//because __insertion may change hash table
+				idx = hash(k);
+				it = __find(idx, k);
+			}
+			return it->second();
+		}
+
+		/*	@brief overload subscript operator
+		 *		return a const reference of k's corresponding value
+		 */
+		const V& operator[](const K &k)const{
+			size_t idx = hash(k);
+			Pair_constIter it = __find(idx, k);
+			//k is not contained
+			if( it == _table[idx].end() ){
+				std::cerr<<"fatal error: key is not contained"<<std::endl;
+				std::cerr<<"program crashed..."<<std::endl;
+				exit(-1);
+			}
+			return it->second();	
+		}
+
 		/*	@brief insert a <k,v> pair
 		 */
 		void insert(const K &k, const V &v){
@@ -263,9 +306,6 @@ class HashMap{
 			//insert
 			__insert(idx,pair);
 
-			if( _N > 10 * _M ){
-				resize(5 * _M);
-			}
 		}
 	
 		/*	@brief remove key k in hash map
