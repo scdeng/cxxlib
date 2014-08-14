@@ -38,12 +38,12 @@ size_t _Fnv_hash_bytes(const void *ptr, size_t len,
 /*	@brief implementation of Murmur hash for 32-bit size_t
  */
 size_t _Hash_bytes(const void* ptr, size_t len, 
-			size_t seed = static_cast<size_t>(0xc70f6907UL) );
+			size_t seed /* = static_cast<size_t>(0xc70f6907UL)*/ );
 
 /*	@brief implementation of FNV hash for 64-bit size_t
  */
 size_t _Fnv_hash_bytes(const void *ptr, size_t len, 
-			size_t seed = static_cast<size_t>(216613626UL) );
+			size_t seed /* = static_cast<size_t>(216613626UL)*/ );
 
 #else
 
@@ -59,45 +59,29 @@ size_t _Fnv_hash_bytes(const void *ptr, size_t len,
 
 #endif
 
-/*	@brief function object
- */
-template <class T> size_t hashcode(const T &t ){
-	return _Hash_bytes( &t, sizeof(t) );
-}
-
 /*	@brief hash a string to a size_t
  */
-size_t hashcode(string str){
-	return _Hash_bytes( str.c_str(), str.length() );
-}
+size_t hashcode(string str);
 
 /*	@brief hash array of char into size_t
  */
-size_t hashcode(char *p, size_t n){
-	return _Hash_bytes( p, n );
-}
+size_t hashcode(char *p, size_t n);
 
-size_t hashcode(int n){
-	return static_cast<size_t>(n);
-}
+size_t hashcode(char const *p, size_t n);
 
-size_t hashcode(char c){
-	return static_cast<size_t>(c);
-}
+size_t hashcode(int n);
 
-size_t hashcode(unsigned char c){
-	return static_cast<size_t>(c);
-}
+size_t hashcode(char c);
 
-size_t hashcode(unsigned int n){
-	return static_cast<size_t>(n);
-}
+size_t hashcode(unsigned char c);
 
-size_t hashcode(long n){
-	return static_cast<size_t>(n);
-}
+size_t hashcode(unsigned int n);
 
-size_t hashcode(unsigned long n){
-	return static_cast<size_t>(n);
-}
+size_t hashcode(long n);
+
+size_t hashcode(unsigned long n);
+
+/*	@brief function object
+ */
+template <class T> size_t hashcode(const T &t);
 

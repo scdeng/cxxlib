@@ -17,6 +17,7 @@
  */
 #include <iostream>
 #include <cstring>
+#include "hash_function.h"
 
 inline size_t unaligned_load(const char *p){
 	size_t result;
@@ -159,3 +160,54 @@ size_t _Fnv_hash_bytes(const void* ptr, size_t len,
 }
 
 #endif /* __SIZEOF_SIZE_T__ */
+
+
+
+
+/*	@brief hash a string to a size_t
+ */
+size_t hashcode(string str){
+	return _Hash_bytes( str.c_str(), str.length() );
+}
+
+/*	@brief hash array of char into size_t
+ */
+inline size_t hashcode(char *p, size_t n){
+	return _Hash_bytes( p, n );
+}
+
+/*	@brief hash array of char into size_t
+ */
+inline size_t hashcode(char const *p, size_t n){
+	return _Hash_bytes( p, n );
+}
+
+inline size_t hashcode(int n){
+	return static_cast<size_t>(n);
+}
+
+inline size_t hashcode(char c){
+	return static_cast<size_t>(c);
+}
+
+inline size_t hashcode(unsigned char c){
+	return static_cast<size_t>(c);
+}
+
+inline size_t hashcode(unsigned int n){
+	return static_cast<size_t>(n);
+}
+
+inline size_t hashcode(long n){
+	return static_cast<size_t>(n);
+}
+
+inline size_t hashcode(unsigned long n){
+	return static_cast<size_t>(n);
+}
+
+/*	@brief function object
+ */
+template <class T> size_t hashcode(const T &t ){
+	return _Hash_bytes( &t, sizeof(t) );
+}

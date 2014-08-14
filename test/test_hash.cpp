@@ -26,7 +26,7 @@ void test_hf(){
 	cout << sizeof(size_t) << endl;
 	string str("hello");
 	cout << hashcode(str) << endl;	
-	cout << hashcode("helloworld") << endl;
+	cout << hashcode(string("helloworld")) << endl;
 }
 
 void test_hashmap(){
@@ -45,6 +45,12 @@ void test_hashmap(){
 	cout << map;
 	cout << "bucket_count is: " << map.bucket_count() << endl;
 	cout << "bucket 1 has: " << map.bucket_size(1) << endl;
+
+	map["abc"] = 10;
+	cout << map;
+	//const HashMap<string,int> another(map);
+	//int n = another["xyz"];
+	//cout << n << endl;
 }
 void test(int argc, char ** argv){
 	test_hf();

@@ -22,7 +22,10 @@
 #include "list.h"
 #include "union_find.h"
 
-void test();
+void freqTopN(size_t n = 100);
+void freqTopN_hashmap(size_t n = 100);
+void test(int argc, char**argv);
 int main(int argc, char **argv){
-	test();
+	//test(argc, argv);
+	freqTopN_hashmap();
 }

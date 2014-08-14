@@ -22,8 +22,9 @@
 #include <vector>
 #include <cstdlib>
 #include <iostream>
+#include "hash_function.h"
 //using namespace std;
-
+#define DEBUG
 template <typename TK, typename TV> 
 class Pair{
 	private:
@@ -80,15 +81,15 @@ class HashMap{
  */
 
 	template <typename TK, typename TV>
-	friend ostream& operator<<(ostream &os, const HashMap<TK,TV> & map);
+	friend std::ostream& operator<<(std::ostream &os, const HashMap<TK,TV> & map);
 
 	private:
 
 		//typedef std::list<Pair<K,V> >::iterator  listPairIter;
-		typedef std::vector<list<Pair<K,V> > > HashTable;
+		typedef std::vector<std::list<Pair<K,V> > > HashTable;
 
-		typedef typename list<Pair<K,V> >::const_iterator Pair_constIter;
-		typedef typename list<Pair<K,V> >::iterator Pair_Iter;
+		typedef typename std::list<Pair<K,V> >::const_iterator Pair_constIter;
+		typedef typename std::list<Pair<K,V> >::iterator Pair_Iter;
 
 		static const size_t INIT_CAPACITY = 7u;
 		//no. of <k,v> pairs
@@ -183,7 +184,7 @@ class HashMap{
 		Pair_Iter __find(size_t idx, const K &k){
 			Pair_Iter it;
 			for(it = _table[idx].begin(); it != _table[idx].end(); ++it){
-				if( (it->first()) == k ) {
+				if( it->first() == k ) {
 					break;
 				}
 			}
@@ -209,9 +210,13 @@ class HashMap{
 		 *		rehash every k and insert every <k,v> pair into new hash table
 		 */
 		void resize(size_t sz){
-			HashTable tmp( HashTable( sz, list<Pair<K,V> >() ) );
+			HashTable tmp( HashTable( sz, std::list<Pair<K,V> >() ) );
+			//update size of table
+			size_t prev_table_size = _M;
+			_M = sz;
+			_N = 0;
 			//for every k,v pair rehash k and insert into tmp
-			for(size_t i=0; i<_M; ++i){
+			for(size_t i=0; i<prev_table_size; ++i){
 				Pair_Iter it;
 				for(it = _table[i].begin(); it != _table[i].end(); ++it){
 					//rehash k
@@ -222,8 +227,6 @@ class HashMap{
 			}
 			//update hash table
 			_table = tmp;
-			//update size of table
-			_M = sz;
 		}
 
 
@@ -232,7 +235,7 @@ class HashMap{
 		/*	@brief default constructor
 		 */
 		HashMap(size_t M = INIT_CAPACITY): _N(0), _M(M),
-			_table(vector<list<Pair<K,V> > >( M, list<Pair<K,V> >() ) )
+			_table(std::vector<std::list<Pair<K,V> > >( M, std::list<Pair<K,V> >() ) )
 		{ }
 
 
@@ -265,8 +268,8 @@ class HashMap{
 				//k is not contained
 				//insert k with a random value
 				V v = V();
-				Pair pair(k,v);
-				__insert(pair);
+				Pair<K,V> pair(k,v);
+				__insert(idx, pair);
 				//get index again
 				//because __insertion may change hash table
 				idx = hash(k);
@@ -371,7 +374,29 @@ class HashMap{
 		size_t bucket_size(size_t idx)const {
 			return _table[idx].size();
 		}
+	
+		/*	@brief return load factor which is
+		 *		_N / _M
+		 */
+		double load_factor() const {
+			return 1.0 * _N / _M ;
+		}
 
+#ifdef DEBUG
+		const HashTable & getHashTable() const{
+			return _table;
+		}
+
+		size_t max_bucket_size() const {
+			size_t max_bs = 0;
+			for(size_t i=0; i<_table.size(); ++i){
+				if( _table[i].size() > max_bs ){
+					max_bs = _table[i].size();
+				}
+			}
+			return max_bs;
+		}
+#endif
 };
 
 template <typename K, typename V>
@@ -380,7 +405,7 @@ std::ostream& operator<<(std::ostream &os, const HashMap<K,V> & map){
 	os << map._M << " # of hash size" << std::endl;
 	for(size_t i=0; i<map._M; ++i){
 		os << "index " << i << " :\t";
-		typename list<Pair<K,V> >::const_iterator it; 
+		typename std::list<Pair<K,V> >::const_iterator it; 
 		for(it=map._table[i].begin(); it != map._table[i].end(); ++it){
 			os<<"<"<<it->first()<<", "<<it->second()<<"> ";
 		}
