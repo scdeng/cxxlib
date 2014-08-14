@@ -24,6 +24,15 @@
 #include <iostream>
 #include "hash_function.h"
 
+
+//largest prime <= 2^i for all i >= 3
+static const int PRIMES[] = {
+	1, 2, 3, 7, 13, 31, 61, 127, 251, 509, 1021, 2039, 4093, 8191, 
+	16381,32749, 65521, 131071, 262139, 524287, 1048573, 2097143, 
+	4194301, 8388593, 16777213, 33554393, 67108859, 134217689, 
+	268435399, 536870909, 1073741789, 2147483647
+};
+
 /*	@brief function object
  */
 template <class T> inline size_t hashcode(const T &t ){
@@ -123,15 +132,6 @@ class Pair{
 template <typename K, typename V>
 class HashMap{
 
-/*	largest prime <= 2^i for all i >= 3
- *	primes[] = {
- *		2, 3, 7, 13, 31, 61, 127, 251, 509, 1021, 2039, 4093, 8191, 16381,
- *		32749, 65521, 131071, 262139, 524287, 1048573, 2097143, 4194301,
- *		8388593, 16777213, 33554393, 67108859, 134217689, 268435399,
- *		536870909, 1073741789, 2147483647
- *	};
- */
-
 	template <typename TK, typename TV>
 	friend std::ostream& operator<<(std::ostream &os, const HashMap<TK,TV> & map);
 
@@ -193,12 +193,14 @@ class HashMap{
 			++_N;
 			//if load factor is more than ten
 			//resize hash table
-			if( _N > 10 * _M ){
-				size_t bits = get_power_of_2(_N);
+			if( _N > 7 * _M ){
+				size_t bits = get_least_power_2(_N);
 #ifdef DEBUG
-				std::cout << "#of bits of " << _N << std::endl;
+				std::cout << bits << " bits of " << _N << std::endl;
+				std::cout << "_N is: " << _N << "\t_M is: " << _M << std::endl;
+				std::cout << "primes is: " << PRIMES[bits] << std::endl;
 #endif
-				resize(5 * _M);
+				resize( PRIMES[bits] );
 			}
 		}
 
@@ -270,7 +272,7 @@ class HashMap{
 			//update size of table
 			size_t prev_table_size = _M;
 			_M = sz;
-			_N = 0;
+			
 			//for every k,v pair rehash k and insert into tmp
 			for(size_t i=0; i<prev_table_size; ++i){
 				Pair_Iter it;
@@ -279,6 +281,7 @@ class HashMap{
 					size_t idx = hash(it->first());
 					//insert <k,v> pair into tmp
 					tmp[idx].push_front(*it);
+					//++_N;
 				}
 			}
 			//update hash table

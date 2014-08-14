@@ -663,8 +663,4 @@ std::ostream& operator<<(std::ostream &os, const IndexMaxPQ<K> &mpq){
 	return os;
 }
 
-
-
-
-
 #endif

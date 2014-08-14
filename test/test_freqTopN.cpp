@@ -65,7 +65,8 @@ void freqTopN_hashmap(size_t n = 100){
 	HashMap<string, int> freq;
 	//ifstream ifs("~/snooker/data/alg4/alg4-data/leipzig1M.txt", std::ifstream::in);
 	//ifstream ifs("/home/gtx780/snooker/data/alg4/algs4-data/tale.txt", std::ifstream::in);
-	ifstream ifs("/home/gtx780/snooker/data/alg4/algs4-data/leipzig1M.txt", std::ifstream::in);
+	//ifstream ifs("/home/dy/snooker/alg4/data/others/medTale.txt", std::ifstream::in);
+	ifstream ifs("/home/dy/snooker/alg4/data/others/leipzig1M.txt", std::ifstream::in);
 	string str;
 	int count = 0;
 	while(ifs>>str){
@@ -97,10 +98,11 @@ void freqTopN_hashmap(size_t n = 100){
 		}
 	}
 	//output top n freq and it's corresponding string(key word)
-	for(multimap<int,string>::iterator it = top.begin(); it != top.end(); ++it){
-		cout << it->first << "=>" << it->second << endl;
-	}
+//	for(multimap<int,string>::iterator it = top.begin(); it != top.end(); ++it){
+//		cout << it->first << "=>" << it->second << endl;
+//	}
 	cout << "# of words: " << count<<endl;;	
 	cout << "load factor is: " << freq.load_factor() << endl;
 	cout << "max bucket size is: " << freq.max_bucket_size() << endl;
+	cout << "_N is: " << freq.size() << " \t _M is: " << freq.bucket_count() << endl;
 }

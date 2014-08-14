@@ -65,7 +65,7 @@ class Map{
 		 *		return an object of V
 		 */
 		V operator[](const K &k) const {
-			return rbt.get(k);
+			return rbt[k];
 		}
 
 		/*	@brief operator[] overload
@@ -74,7 +74,7 @@ class Map{
 		 *			insert k
 		 */
 		V& operator[](const K &k) {
-			return rbt.get(k);
+			return rbt[k];
 		}
 			
 		K min() const {

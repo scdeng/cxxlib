@@ -16,6 +16,7 @@
  * =====================================================================================
  */
 
+#include <stack>
 #include "hash_function.h"
 #include "hash_map.h"
 #include <iostream>
@@ -23,10 +24,15 @@
 using namespace std;
 
 void test_hf(){
+	stack<double> st;
 	cout << sizeof(size_t) << endl;
 	string str("hello");
-	cout << hashcode(str) << endl;	
-	cout << hashcode(string("helloworld")) << endl;
+	cout << "hash code of string: " << hashcode(str) << endl;	
+	cout << "hash code of stack: " << hashcode(st) << endl;
+	cout << "hash code of const char array: " << hashcode("helloworld")<< endl;
+	cout << "hash code of int: " << hashcode(3) << endl;
+	double d = 8.9;
+	cout << "hash code of double: " << hashcode(d) << endl;
 }
 
 void test_hashmap(){
@@ -45,12 +51,6 @@ void test_hashmap(){
 	cout << map;
 	cout << "bucket_count is: " << map.bucket_count() << endl;
 	cout << "bucket 1 has: " << map.bucket_size(1) << endl;
-
-	map["abc"] = 10;
-	cout << map;
-	//const HashMap<string,int> another(map);
-	//int n = another["xyz"];
-	//cout << n << endl;
 }
 void test(int argc, char ** argv){
 	test_hf();

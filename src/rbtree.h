@@ -83,6 +83,11 @@ template <typename K, typename V> class RBTNode{
 			key(k), value(v), color(c), sz(s),left(NULL), right(NULL) { }
 };
 
+
+
+/*	@brief red black tree implementation
+ *		left leanning 2-3 tree
+ */
 template <typename K, typename V>
 class RBTree{
 	template <typename TS, typename US>
@@ -667,6 +672,32 @@ class RBTree{
 			}
 			check_red_black_tree(root);
 		}
+		
+		/*	@brief overload operator
+		 */
+		V& operator[](const K &k)const{
+			Node *p = get(root,k);
+			if( !p ){
+				V v;
+				insert(k,v);
+				Node *x = get(root,k);
+				return x->value;
+			}
+			return p->value;
+		}
+
+		/*	@brief overload operator
+		 */
+		V& operator[](const K &k){
+			Node *p = get(root,k);
+			if( !p ){
+				V v;
+				insert(k,v);
+				Node *x = get(root,k);
+				return x->value;
+			}
+			return p->value;
+		}
 
 		/*	@brief 	destructor
 		 *			delete all nodes
@@ -904,17 +935,18 @@ class RBTree{
 		 *			if k is not contained
 		 *			then insert k with a default value
 		 *	Note:	this is similiar with stl map[key] = value operation
+		 *	replaced by operator[]
 		 */
-		V& get(const K &k) {
-			Node *p = get(root,k);
-			if( !p ){
-				V v;
-				insert(k,v);
-				Node *x = get(root,k);
-				return x->value;
-			}
-			return p->value;
-		}
+//		V& get(const K &k) {
+//			Node *p = get(root,k);
+//			if( !p ){
+//				V v;
+//				insert(k,v);
+//				Node *x = get(root,k);
+//				return x->value;
+//			}
+//			return p->value;
+//		}
 
 
 		/*	@brief check if k is contained
