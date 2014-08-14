@@ -23,6 +23,58 @@
 #include <cstdlib>
 #include <iostream>
 #include "hash_function.h"
+
+/*	@brief function object
+ */
+template <class T> inline size_t hashcode(const T &t ){
+	return _Hash_bytes( &t, sizeof(t) , static_cast<size_t>(0xc70f6907UL) );
+}
+
+/*	@brief hash a string to a size_t
+ */
+inline size_t hashcode(string str){
+	return _Hash_bytes( str.c_str(), str.length(), 0 );
+}
+
+/*	@brief hash array of char into size_t
+ */
+inline size_t hashcode(char *p, size_t n){
+	return _Hash_bytes( p, n, 0 );
+}
+
+/*	@brief hash array of char into size_t
+ */
+inline size_t hashcode(char const *p, size_t n){
+	return _Hash_bytes( p, n, 0 );
+}
+
+inline size_t hashcode(int n){
+	return static_cast<size_t>(n);
+}
+
+inline size_t hashcode(char c){
+	return static_cast<size_t>(c);
+}
+
+inline size_t hashcode(unsigned char c){
+	return static_cast<size_t>(c);
+}
+
+inline size_t hashcode(unsigned int n){
+	return static_cast<size_t>(n);
+}
+
+inline size_t hashcode(long n){
+	return static_cast<size_t>(n);
+}
+
+inline size_t hashcode(unsigned long n){
+	return static_cast<size_t>(n);
+}
+//===================================================//
+
+
+
 //using namespace std;
 #define DEBUG
 template <typename TK, typename TV> 
@@ -142,6 +194,10 @@ class HashMap{
 			//if load factor is more than ten
 			//resize hash table
 			if( _N > 10 * _M ){
+				size_t bits = get_power_of_2(_N);
+#ifdef DEBUG
+				std::cout << "#of bits of " << _N << std::endl;
+#endif
 				resize(5 * _M);
 			}
 		}
