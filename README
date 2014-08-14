@@ -70,3 +70,6 @@ CXX template library and basic graph algorithms
 		.or( with parentheses)  eg.  (AC|BD)
 		eg. ((A*B|AC)D)
 
+16.hash_map.h	hash_function.h	  hash_function.cpp
+	hash map implementation
+		
