@@ -75,7 +75,8 @@ void morris_pre(Node *root){
 			cout << cur->data << " ";
 			cur = cur->right;
 		}else{
-			
+
+			//find cur's previous node (in-order)
 			pre = cur->left;
 			while( pre->right != NULL && pre->right != cur ){
 				pre = pre->right;

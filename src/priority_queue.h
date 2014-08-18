@@ -553,7 +553,9 @@ template <typename K> class IndexMaxPQ{
 			pq = Array<int>(maxN + 1, -1);
 			qp = Array<int>(maxN, -1);
 		}
-	
+
+		/*	@brief remove key which is associated with index
+		 */
 		void remove(int index){
 			check_index(index);
 			if( !contain(index) ){
