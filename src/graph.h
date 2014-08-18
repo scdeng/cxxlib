@@ -35,15 +35,15 @@ class DepthFirstPaths;
 class BreadthFirstPaths;
 class WeightEdge;
 class EdgeWeightGraph;
-ostream& operator<<(ostream &os, Graph &g);
-ostream& operator<<( ostream &os, DepthFirstPaths &dfs);
-ostream& operator<<(ostream &, BreadthFirstPaths &);
+ostream& operator<<(ostream &os, const Graph &g);
+ostream& operator<<( ostream &os, const DepthFirstPaths &dfs);
+ostream& operator<<(ostream &, const BreadthFirstPaths &);
 std::ostream& operator<<(std::ostream &os, const WeightEdge &e);
 std::ostream& operator<<(std::ostream &os, const EdgeWeightGraph &g);
 
 class Graph{
 	
-	friend ostream& operator<<(ostream &os, Graph &g);
+	friend ostream& operator<<(ostream &os, const Graph &g);
 
 	private:
 		//no. of vertics
@@ -104,7 +104,7 @@ class Graph{
  */
 class DepthFirstPaths{
 #ifdef DEBUG_PRINT
-	friend ostream& operator<<(ostream&, DepthFirstPaths &);
+	friend ostream& operator<<(ostream&, const DepthFirstPaths &);
 #endif
 	private:
 		//visited mark
@@ -157,7 +157,7 @@ class DepthFirstPaths{
  */
 class BreadthFirstPaths{
 #ifdef DEBUG_PRINT
-	friend ostream& operator<<(ostream&, BreadthFirstPaths &);
+	friend ostream& operator<<(ostream&, const BreadthFirstPaths &);
 #endif
 	private:
 		//visited
@@ -410,5 +410,48 @@ class EdgeWeightGraph{
 		 */
 		int E()const{ return _E; }
 };
+
+/*	@brief articulate point(vertex)
+ *		processing Graph
+ */
+class ArticPoint{
+	
+	private:
+		//is visited
+		vector<bool> marked;
+		//parent of this vertex
+		vector<int> parent;
+		//is articulation point
+		vector<bool> isAP;
+		//lowest node of dfs subtree rooted at this node
+		vector<int> low;
+		//dfs discovery time
+		vector<int> disc;
+	
+		/*	@brief utility function
+		 *		return minimum int of two integers
+		 */
+		int min(int a, int b){
+			return (a < b) ? a : b;
+		}
+	
+		/*	@brief dfs utility function
+		 */
+		void articUtil(const Graph &G, int v, int &count);
+
+	public:
+		/*	@brief constructor with a graph
+		 */
+		ArticPoint(const Graph &G);
+		
+		/*	@brief check if vertex v is articulation point
+		 */
+		bool isArticulationPoint(int v) const {
+			return isAP[v];
+		}
+
+};
+
+
 
 #endif 

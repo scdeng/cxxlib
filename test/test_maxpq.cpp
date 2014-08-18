@@ -21,17 +21,17 @@
 using namespace std;
 
 void test_pq(){
-	IndexMaxPQ<char> pq(2e7);
+	IndexMaxPQ<char> pq(10);
 	pq.insert(0, 'A');
 	pq.insert(2, 'C');
 	pq.insert(4, 'D');
 	pq.insert(8, 'M');
-	//cout << pq;
+	cout << pq;
 	int n;
 	cout << "input a number" << endl;
 	cin >> n;
 }
 
-void test(){
+void test(int argc, char **argv){
 	test_pq();
 }

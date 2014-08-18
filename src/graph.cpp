@@ -76,11 +76,11 @@ deque<int> DepthFirstPaths::pathTo(int v)const{
 }
 
 #ifdef DEBUG_PRINT
-ostream& operator<<(ostream &os, Graph &g){
+ostream& operator<<(ostream &os, const Graph &g){
 	os << g.V() << " verices and " << g.E() << " edges" << endl;
 	for(int i=0; i<g._v; i++){
 		os << i << " : " ;
-		for(list<int>::iterator it = (g.adj[i]).begin();
+		for(list<int>::const_iterator it = (g.adj[i]).begin();
 					it != (g.adj[i]).end(); ++it){
 			os << *it << " ";
 		}
@@ -89,7 +89,7 @@ ostream& operator<<(ostream &os, Graph &g){
 	return os;
 }
 
-ostream& operator<<( ostream &os, DepthFirstPaths &dfs){
+ostream& operator<<( ostream &os, const DepthFirstPaths &dfs){
 	os << "marked is: " << endl;
 	for(unsigned i=0; i<dfs.marked.size(); ++i){
 		os << (dfs.marked)[i] << ", ";
@@ -101,7 +101,7 @@ ostream& operator<<( ostream &os, DepthFirstPaths &dfs){
 
 
 
-ostream& operator<<(ostream &os, BreadthFirstPaths &bfs){
+ostream& operator<<(ostream &os, const BreadthFirstPaths &bfs){
 	os << "marked is: " << endl;
 	for(unsigned i=0; i<bfs.marked.size(); ++i){
 		os << (bfs.marked)[i] << ", ";
@@ -264,5 +264,60 @@ void EdgeWeightGraph::addEdge(Edge e){
 	_adj[v].push_back(e);
 	//increase no. of edge
 	++_E;
+}
+
+/*	@brief dfs utility function
+*/
+void ArticPoint::articUtil(const Graph &G, int v, int &count){
+	marked[v] = true;
+	int children = 0;
+	disc[v] = low[v] = ++count;
+	list<int>::const_iterator it;
+	for(it = G.adjacent(v).begin(); it != G.adjacent(v).end(); ++it){
+		int w = *it;
+		if( !marked[w] ){
+			++children;
+			//set parent of w to v
+			parent[w] = v;
+			//recursively find w
+			articUtil(G, w, count);
+			//after search w (one of v's children)
+			//check if subtree rooted w has a back edge to a lowest vertex
+			low[v] = min(low[w], low[v]);
+
+			//case 1: if root of dfs tree has more than 1 childred
+			//v is a articulation point
+			if( parent[v] == INT_MAX && children > 1){
+				isAP[v] = true;
+			}
+			//case 2:
+			//if v is not a root of dfs tree
+			//one of it's child has no back edge to v's parent
+			//which indicats path to w shall contain v
+			//
+			//v is remove and this child of v is isolated
+			if( parent[v] != INT_MAX && low[w] >= disc[v] ){
+				isAP[v] = true;
+			}
+		}else if( w != parent[v] ){
+			//low[v] is minimum of low[w] and low[v]
+			low[v] = min(low[v], low[w]);
+		}
+	}	
+}
+/*	@brief constructor with a graph
+*/
+ArticPoint::ArticPoint(const Graph &G){
+	marked = vector<bool>(G.V(), false);
+	parent = vector<int>(G.V(), INT_MAX);
+	isAP = vector<bool>(G.V(), false);
+	low = vector<int>(G.V(), INT_MAX);
+	disc = vector<int>(G.V(), INT_MAX);
+	int count = 0;
+	for( int v=0; v<G.V(); ++v){
+		if( !marked[v]){
+			articUtil(G, v, count);
+		}
+	}
 }
 
