@@ -1,15 +1,15 @@
 CXX template library and basic graph algorithms
 
 1.array.h
-	
+	dynamic array with naive implementation iterator	
 2.list.h
-
+	bidirectional linked list with naive implementation iterator	
 3.stack
-
+	list adapter
 4.queue
-
+	list adapter
 5.tree.h
-	binary search tree
+	template binary search tree
 
 6.rbtree.h
 	template red black tree
@@ -21,9 +21,10 @@ CXX template library and basic graph algorithms
 	set: red black tree adapter
 
 9.priority_queue.h
-	MinPQ & IndexMinPQ: heap based priority queue implementation
+	MinPQ & IndexMinPQ & IndexMaxPQ: heap based priority queue implementation
 	minimum priority queue: min heap
 	Indexed minimum priority queue: associate each key with an index
+	Indexed maximum priority queue: associate each key with an index
 
 10. union_find.h
 	weighted quick union implementation with path compression
