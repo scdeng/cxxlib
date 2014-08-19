@@ -65,7 +65,8 @@ void morris_in(Node *root){
 
 
 
-
+/*	@brief morris prev-order traversal binary tree
+ */
 void morris_pre(Node *root){
 	Node *cur = root;
 	Node *pre;
