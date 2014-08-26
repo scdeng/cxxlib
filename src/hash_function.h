@@ -15,6 +15,8 @@
  *
  * =====================================================================================
  */
+#ifndef HASH_FUNCTION_H
+#define HASH_FUNCTION_H
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -96,7 +98,7 @@ unsigned long hashString( const char *lpszkeyName, unsigned long dwHashType){
 
 //=====================================================//
 
-
+#endif
 
 
 
