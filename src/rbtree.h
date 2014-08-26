@@ -153,7 +153,6 @@ class RBTree{
 			return 1 + max( height(p->left), height(p->right) );
 		}
 
-		//flip p and its children's color
 		/*	@brief flip p and p's two children's colors
 		 *		assume that 
 		 *	assert all p && p->left && p->right are non-NULL

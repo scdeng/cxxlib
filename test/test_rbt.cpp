@@ -68,10 +68,6 @@ void test_insert(){
 
 	cout << rb;
 
-	deque<char> keys = rb.keys(); 
-	for( deque<char>::iterator it = keys.begin(); it != keys.end(); ++it){
-		cout << *it << " ";
-	}
 	cout << endl;
 
 }
@@ -96,10 +92,7 @@ void test_rbt(){
 
 	cout << rb ;
 	cout << "=====================================" <<endl;
-	deque<int> keys = rb.keys(); 
-	for( deque<int>::iterator it = keys.begin(); it != keys.end(); ++it){
-		cout << *it << " ";
-	}
+	
 	cout << endl;
 }
 
@@ -139,4 +132,81 @@ void test_rbtree(){
 	cout << "deletion " << NUM_OF_DELETION << " times" <<endl;
 	int n;
 	cin>>n;
+}
+
+
+void test_alg4(){
+	RBTree<char, int> rbt;
+	
+	rbt.insert('S', 0);
+	cout << "******************after insert S************************" << endl;
+	printBST(rbt);
+	cout << endl;
+
+	rbt.insert('E', 1);
+	cout << "******************after insert E************************" << endl;
+	printBST(rbt);
+	cout << endl;
+	
+	rbt.insert('A', 2);
+	cout << "******************after insert A************************" << endl;
+	printBST(rbt);
+	cout << endl;
+	
+	rbt.insert('R', 3);
+	cout << "******************after insert R************************" << endl;
+	printBST(rbt);
+	cout << endl;
+
+	rbt.insert('C', 4);
+	cout << "******************after insert C************************" << endl;
+	printBST(rbt);
+	cout << endl;
+	
+	rbt.insert('H', 5);
+	cout << "******************after insert H************************" << endl;
+	printBST(rbt);
+	cout << endl;
+	
+	rbt.insert('X', 6);
+	cout << "******************after insert X************************" << endl;
+	printBST(rbt);
+	cout << endl;
+	
+	rbt.insert('M', 7);
+	cout << "******************after insert M************************" << endl;
+	printBST(rbt);
+	cout << endl;
+	
+	rbt.insert('P', 8);
+	cout << "******************after insert P************************" << endl;
+	printBST(rbt);
+	cout << endl;
+	
+	rbt.insert('L', 9);
+	cout << "******************after insert L************************" << endl;
+	printBST(rbt);
+	
+	rbt.removeMax();
+	cout << "******************after remove max**********************" << endl;
+	printBST(rbt);
+
+	rbt.removeMax();
+	cout << "******************after remove max**********************" << endl;
+	printBST(rbt);
+	
+	rbt.removeMin();
+	cout << "******************after remove min**********************" << endl;
+	printBST(rbt);
+
+	rbt.removeMin();
+	cout << "******************after remove min**********************" << endl;
+	printBST(rbt);
+
+}
+
+
+
+void test(int argc, char **argv){
+	test_alg4();
 }
