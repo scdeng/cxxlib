@@ -25,6 +25,8 @@
 #include "hash_function.h"
 
 
+#define DEBUG
+
 //largest prime <= 2^i for all i >= 3
 static const int PRIMES[] = {
 	1, 2, 3, 7, 13, 31, 61, 127, 251, 509, 1021, 2039, 4093, 8191, 
