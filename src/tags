@@ -3,7 +3,7 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+!_TAG_PROGRAM_VERSION	5.8	//
 ARRAY_H	array.h	20;"	d
 Array	array.h	/^		Array(): sz(0), cap(1), ptr(new T[1]){ }$/;"	f	class:Array
 Array	array.h	/^		Array(const Array &from) {$/;"	f	class:Array
@@ -28,6 +28,7 @@ CC	graph.cpp	/^CC::CC(const Graph &g){$/;"	f	class:CC
 CC	graph.h	/^class CC{$/;"	c
 CRYPTOTABLE	hash_function.h	/^static unsigned long CRYPTOTABLE[0x500];$/;"	v
 CXXFLAGS	Makefile	/^CXXFLAGS = -Wall -g $/;"	m
+DEBUG	hash_map.h	28;"	d
 DEBUG_CHECK	rbtree.h	35;"	d
 DEBUG_MODE	list.h	23;"	d
 DEBUG_PRINT	graph.h	31;"	d
@@ -203,13 +204,14 @@ _E	digraph.h	/^		int _E;$/;"	m	class:EdgeWeightedDigraph
 _E	graph.h	/^		int _E;$/;"	m	class:EdgeWeightGraph
 _Fnv_hash_bytes	hash_function.cpp	/^size_t _Fnv_hash_bytes(const void* ptr, size_t len, $/;"	f
 _Fnv_hash_bytes	hash_function.cpp	/^size_t _Fnv_hash_bytes(const void* ptr, size_t len,$/;"	f
+_HASH_FUNCTION_H	hash_function.h	19;"	d
 _Hash_bytes	hash_function.cpp	/^size_t _Hash_bytes(const void* ptr, size_t len, $/;"	f
 _M	hash_map.h	/^		size_t _M;$/;"	m	class:HashMap
 _N	hash_map.h	/^		size_t _N;$/;"	m	class:HashMap
 _V	digraph.h	/^		int _V;$/;"	m	class:EdgeWeightedDigraph
 _V	graph.h	/^		int _V;$/;"	m	class:EdgeWeightGraph
 __E	digraph.h	/^		int __E;$/;"	m	class:Digraph
-__SIZEOF_SIZE_T	hash_function.h	22;"	d
+__SIZEOF_SIZE_T	hash_function.h	25;"	d
 __V	digraph.h	/^		int __V;$/;"	m	class:Digraph
 __adj	digraph.h	/^		vector<list<int> > __adj;$/;"	m	class:Digraph
 __contain	hash_map.h	/^		bool __contain(const K &k) const {$/;"	f	class:HashMap
@@ -310,7 +312,6 @@ count	graph.h	/^		int count()const{$/;"	f	class:CC
 count	graph.h	/^		int count()const{$/;"	f	class:DepthFirstPaths
 count	shortest_path.h	/^		int count;$/;"	m	class:BellmanFordSP
 count	union_find.h	/^		int count;$/;"	m	class:UF
-create_rbt	test_rbt.cpp	/^void create_rbt(RBTree<int, string> &rb){$/;"	f
 cur	list.h	/^	ListNode<U> *cur;$/;"	m	class:Iterator__Linked
 cyc	digraph.h	/^		deque<Edge> cyc;$/;"	m	class:EdgeWeightedDirectedCycle
 cyc	digraph.h	/^		deque<int> cyc;$/;"	m	class:DirectedCycle
@@ -323,7 +324,6 @@ data	queue.h	/^		List<T> data;$/;"	m	class:Queue
 data	stack.h	/^		List<T> data;$/;"	m	class:Stack
 deep_copy_data	array.h	/^		void deep_copy_data(T *src, T* dest, size_t n){$/;"	f	class:Array
 deep_copy_tree	rbtree.h	/^		Node * deep_copy_tree(Node *p){$/;"	f	class:RBTree
-delete_rbt	test_rbt.cpp	/^void delete_rbt(){$/;"	f
 dequeue	queue.h	/^		void dequeue(){$/;"	f	class:Queue
 destroy	array.h	/^		void destroy(){$/;"	f	class:Array
 destroy	list.h	/^	void destroy(){$/;"	f	class:List
@@ -409,7 +409,7 @@ hasNext	list.h	/^	bool hasNext()const{$/;"	f	class:Iterator__Linked
 hasPathTo	graph.h	/^		bool hasPathTo(int v)const{$/;"	f	class:BreadthFirstPaths
 hasPathTo	graph.h	/^		bool hasPathTo(int v)const{$/;"	f	class:DepthFirstPaths
 hash	hash_map.h	/^		size_t hash(const K &k)const{$/;"	f	class:HashMap
-hashString	hash_function.h	/^unsigned long hashString( const char *lpszkeyName, unsigned long dwHashType){$/;"	f
+hashString	hash_function.h	/^inline unsigned long hashString( const char *lpszkeyName, unsigned long dwHashType){$/;"	f
 hashcode	hash_map.h	/^inline size_t hashcode(char *p, size_t n){$/;"	f
 hashcode	hash_map.h	/^inline size_t hashcode(char c){$/;"	f
 hashcode	hash_map.h	/^inline size_t hashcode(char const *p, size_t n){$/;"	f
@@ -627,9 +627,8 @@ pq	priority_queue.h	/^		Array<int> pq;$/;"	m	class:IndexMaxPQ
 pq	priority_queue.h	/^		Array<int> pq;$/;"	m	class:IndexMinPQ
 pq	shortest_path.h	/^		IndexMinPQ<double> pq;$/;"	m	class:DijkstraSP
 preOrder	digraph.h	/^		deque<int> preOrder() const {$/;"	f	class:DFSOrder
-prepareCryptoTable	hash_function.h	/^void prepareCryptoTable(){$/;"	f
+prepareCryptoTable	hash_function.h	/^inline void prepareCryptoTable(){$/;"	f
 prev	list.h	/^	ListNode<T> *prev;$/;"	m	struct:ListNode
-printBST	test_rbt.cpp	/^void printBST(RBTree<char,int> &rb){$/;"	f
 ptr	array.h	/^		T * ptr;$/;"	m	class:Array
 ptr	array.h	/^		U *ptr;$/;"	m	class:Iterator__Seq
 push	stack.h	/^		void push(const T &t){$/;"	f	class:Stack
@@ -724,11 +723,6 @@ sz	rbtree.h	/^		size_t sz;$/;"	m	class:RBTNode
 sz	tree.h	/^		size_t sz;$/;"	m	struct:TreeNode
 sz	union_find.h	/^		Array<int> sz;$/;"	m	class:UF
 tail	list.h	/^	ListNode<T> *tail;$/;"	m	class:List
-test	test_rbt.cpp	/^void test(int argc, char **argv){$/;"	f
-test_alg4	test_rbt.cpp	/^void test_alg4(){$/;"	f
-test_insert	test_rbt.cpp	/^void test_insert(){$/;"	f
-test_rbt	test_rbt.cpp	/^void test_rbt(){$/;"	f
-test_rbtree	test_rbt.cpp	/^void test_rbtree(){$/;"	f
 to	digraph.h	/^		int to() const{$/;"	f	class:DirectedWeightedEdge
 top	stack.h	/^		T top() const {$/;"	f	class:Stack
 top	stack.h	/^		T& top() {$/;"	f	class:Stack

@@ -99,8 +99,8 @@ inline unsigned long hashString( const char *lpszkeyName, unsigned long dwHashTy
 
 //=====================================================//
 
-#endif
 
+#endif
 
 
 
