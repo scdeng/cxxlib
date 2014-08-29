@@ -15,8 +15,9 @@
  *
  * =====================================================================================
  */
-#ifndef HASH_FUNCTION_H
-#define HASH_FUNCTION_H
+#ifndef _HASH_FUNCTION_H
+#define _HASH_FUNCTION_H
+
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -65,7 +66,7 @@ size_t _Fnv_hash_bytes(const void *ptr, size_t len,
 
 static unsigned long CRYPTOTABLE[0x500];
 
-void prepareCryptoTable(){
+inline void prepareCryptoTable(){
 	unsigned long seed = 0x00100001;
 	unsigned long index1 = 0; 
 	unsigned long index2 = 0;
@@ -83,7 +84,7 @@ void prepareCryptoTable(){
 	}
 }
 
-unsigned long hashString( const char *lpszkeyName, unsigned long dwHashType){
+inline unsigned long hashString( const char *lpszkeyName, unsigned long dwHashType){
 	unsigned char *key = (unsigned char*)lpszkeyName;
 	unsigned long seed1 = 0x7FED7FED;
 	unsigned long seed2 = 0xEEEEEEEE;
